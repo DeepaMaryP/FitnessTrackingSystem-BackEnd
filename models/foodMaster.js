@@ -10,9 +10,9 @@ const foodMasterSchema = new Schema(
         calories: { type: Double, required: true },
         protein_g: { type: Double, required: true },
         carbs_g: { type: Double, required: true },
-        fat_g: { type: Double, required: true },
-        fiber_g: { type: Double, required: true },
-        sugar_g: { type: Double, required: true },
+        fat_g: { type: Double},
+        fiber_g: { type: Double},
+        sugar_g: { type: Double},
     }, { timestamps: true }
 )
 

@@ -1,7 +1,7 @@
-const mongoose = require("mongoose");
+import mongoose, { model, Schema } from "mongoose";
 
-const userPaymentSchema = new mongoose.Schema({
-    user_id: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+const userPaymentSchema = new Schema({
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     payment_plan_id: { type: mongoose.Schema.Types.ObjectId, ref: "PaymentPlanMaster", required: true },
 
     amount: { type: Number, required: true },

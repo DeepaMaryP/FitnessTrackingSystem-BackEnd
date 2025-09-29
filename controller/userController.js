@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { createUserService, deleteUserService, getAllUsersService, getUserDetailsWithEmail, getUserWithId, updateUserService } from "../services/userService.js"
+import { createUserService, deleteUserService, getAllUsersService, getUserDetailsWithEmail, getUsersCountForDashboardService, getUserStatisticsService, getUserWithId, updateUserService } from "../services/userService.js"
 
 export const loginUser = async (req, res) => {
     try {
@@ -35,7 +35,7 @@ export const createUser = async (req, res) => {
     if (result.success) {
         return res.status(201).json({ success: true, userName: result.user.email, message: "User created successfully" })
     } else {
-       return res.status(500).json({
+        return res.status(500).json({
             success: false,
             message: result.message,
             errors: result.errors,
@@ -43,13 +43,57 @@ export const createUser = async (req, res) => {
     }
 }
 
-
 export const getUsers = async (req, res) => {
     const response = await getAllUsersService();
     if (response.success)
         return res.status(200).send(response);
     else {
         return res.status(500).json({ success: false, message: "Failed to get users" });
+    }
+}
+
+export const getUsersCount = async (req, res) => {
+    const response = await getUsersCountForDashboardService();
+    if (response.success)
+        return res.status(200).send(response);
+    else {
+        return res.status(500).json({ success: false, message: "Failed to get users count" });
+    }
+}
+
+function getLastSixMonths() {
+    const months = [];
+    const today = new Date();
+
+    for (let i = 5; i >= 0; i--) {
+        const d = new Date(today.getFullYear(), today.getMonth() - i, 1);
+        months.push({
+            year: d.getFullYear(),
+            month: d.getMonth() + 1, // JS months are 0-based
+            label: d.toLocaleString("default", { month: "short", year: "numeric" }),
+            registrations: 0
+        });
+    }
+    return months;
+}
+
+export const getUserStatistics = async (req, res) => {
+    let monthsList = getLastSixMonths();
+    const response = await getUserStatisticsService();
+    if (response.success) {
+        monthsList = monthsList.map(m => {
+            const match = response.userCounts.find(r => r._id.year === m.year && r._id.month === m.month);
+            return {
+                ...m,
+                registrations: match ? match.count : 0
+            };
+        });
+
+        console.log(monthsList);
+        return res.status(200).send(monthsList);
+    }
+    else {
+        return res.status(500).json({ success: false, message: "Failed to get users statistics" });
     }
 }
 
@@ -79,3 +123,4 @@ export const deleteUser = async (req, res) => {
         return res.status(500).json({ success: false, message: "Failed to delete user" });
     }
 }
+

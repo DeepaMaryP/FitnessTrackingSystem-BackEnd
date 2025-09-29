@@ -16,19 +16,24 @@ export const createBodyMeasurementService = async (data) => {
 }
 
 
-export const getAllBodyMeasurementService = async () => {
+export const getCurrentBodyMeasurementService = async (userId) => {
     try {
-        const allBodyMeasurement = await BodyMeasurement.find();
-        return { success: true, allBodyMeasurement };
+        const currBodyMeasurement = await BodyMeasurement.findOne({
+            userId: userId
+        }).sort({ Date: -1 });
+        return { success: true, currBodyMeasurement };
 
     } catch (error) {
         return { success: false }
     }
 }
 
-export const getBodyMeasurementWithId = async (id) => {
+export const getBodyMeasuremenHistoryService = async (userId) => {
     try {
-        const bodyMeasurement = await BodyMeasurement.findById(id)
+        const bodyMeasurement = await BodyMeasurement.find({
+            userId: userId
+        })
+
         if (bodyMeasurement) {
             return bodyMeasurement
         }

@@ -7,7 +7,7 @@ export const createUserPaymentService = async (data) => {
         return { success: true }
     } catch (error) {
         console.log(error);
-       return {
+        return {
             success: false,
             message: error.message || "Failed to create UserPayment",
             errors: error.errors || null, // contains field-level details (phone, email etc.)
@@ -15,9 +15,11 @@ export const createUserPaymentService = async (data) => {
     }
 }
 
-export const getAllUserPaymentService = async () => {
+export const getLatestUserPaymentService = async (userId) => {
     try {
-        const allUserPayment = await UserPayment.find();
+        const allUserPayment = await UserPayment.find({
+            userId: userId, expiry_date: { $gte: today }
+        });
         return { success: true, allUserPayment };
 
     } catch (error) {
@@ -25,32 +27,36 @@ export const getAllUserPaymentService = async () => {
     }
 }
 
-export const getUserPaymentWithId = async (id) => {
+export const getPaidUserCountWithNoTrainersService = async () => {
     try {
-        const userPayment = await UserPayment.findById(id)
-        if (userPayment) {
-            return userPayment
-        }
-        return false
+        const totalUnassignedPaidUsers = await UserPayment.aggregate([
+            {
+                $match: {
+                    status: "Completed",
+                    expiry_date: { $gte: new Date() }
+                }
+            },
+            {
+                $lookup: {
+                    from: "userTrainer",
+                    localField: "userId",
+                    foreignField: "userId",
+                    as: "trainerAssignment"
+                }
+            },
+            {
+                $match: {
+                    trainerAssignment: { $size: 0 }
+                }
+            },
+            {
+                $count: "totalUnassignedPaidUsers"
+            }
+        ]);
+
+        return { success: true, totalUnassignedPaidUsers };
 
     } catch (error) {
-        return false
-    }
-}
-
-export const updateUserPaymentService = async (id, data) => {
-    try {
-        const updatedUserPayment = await UserPayment.findByIdAndUpdate(id, data);
-        if (updatedUserPayment) {
-            return { success: true, message: "UserPayment updated succesfully" }
-        } else {
-            return { success: false, message: "Failed to update" }
-        }
-
-    } catch (error) {
-        console.log(error);
         return { success: false }
-
     }
 }
-

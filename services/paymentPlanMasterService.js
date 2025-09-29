@@ -2,11 +2,11 @@ import PaymentPlan from "../models/paymentPlanMaster.js";
 
 export const createPaymentPlanService = async (data) => {
     try {
-        let newPaymentPlan = new PaymentPlan (data);
+        let newPaymentPlan = new PaymentPlan(data);
         newPaymentPlan = await newPaymentPlan.save();
-        return {success : true, PaymentPlan:newPaymentPlan}
+        return { success: true, PaymentPlan: newPaymentPlan }
     } catch (error) {
-        console.log({error});
+        console.log({ error });
         return {
             success: false,
             message: error.message || "Failed to create PaymentPlan",
@@ -55,12 +55,65 @@ export const updatePaymentPlanService = async (id, data) => {
     }
 }
 
-export const deletePaymentPlanService = async(id) =>{
+
+export const approvePaymentPlanService = async (id) => {
     try {
-       await PaymentPlan.findByIdAndDelete(id)
-       return true;
+        const updatedPaymentPlan = await PaymentPlan.findByIdAndUpdate(id, { $set: { status: "Approved" } })
+        if (updatedPaymentPlan) {
+            return { success: true, message: "PaymentPlan approved succesfully" }
+        } else {
+            return { success: false, message: "Failed to update" }
+        }
+
     } catch (error) {
         console.log(error);
-        return false;        
+        return { success: false }
+
+    }
+}
+
+
+export const deletePaymentPlanService = async (id) => {
+    try {
+        await PaymentPlan.findByIdAndDelete(id)
+        return true;
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+}
+
+export const getTotalEarningsService = async (date) => {
+    try {
+        const newDate = new Date(date)
+        const selMonth = newDate.getMonth();
+        const selYear = newDate.getFullYear();
+
+        const result = await PaymentPlan.aggregate([
+            {
+                $match: {
+                    $expr: {
+                        $and: [
+                            { $eq: [{ $month: "$createdAt" }, selMonth] },
+                            { $eq: [{ $year: "$createdAt" }, selYear] }
+                        ]
+                    }
+                }
+            },
+            {
+                $group: {
+                    _id: null,
+                    totalEarnings: { $sum: "$price" }
+                }
+            }
+        ]);
+
+        const totalEarningsThisMonth = result.length > 0 ? result[0].totalEarnings : 0;
+        console.log("Total Earnings This Month:", totalEarningsThisMonth);
+
+        return { success: true, total: totalEarningsThisMonth }
+    } catch (error) {
+        console.log(error);
+        return false;
     }
 }

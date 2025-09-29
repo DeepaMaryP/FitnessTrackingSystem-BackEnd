@@ -1,0 +1,12 @@
+import { Router } from "express";
+import { handleAuth } from "../middleware/auth.js";
+import { validateTargetGoal } from "../middleware/targetGoalMiddleware.js";
+import { createTargetGoal, getTargetGoal, updateTargetGoal } from "../controller/targetGoalController.js";
+
+const router = Router()
+
+router.route("/").post(validateTargetGoal, handleAuth, createTargetGoal);
+router.route("/:userId").get(handleAuth, getTargetGoal)
+router.route("/:Id").patch(handleAuth, validateTargetGoal, updateTargetGoal)
+
+export default router;

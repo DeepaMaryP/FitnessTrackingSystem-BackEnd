@@ -16,26 +16,13 @@ export const createTargetGoalService = async (data) => {
 }
 
 
-export const getAllTargetGoalService = async () => {
+export const getTargetGoalService = async (userId) => {
     try {
-        const allTargetGoal = await TargetGoal.find();
+        const allTargetGoal = await TargetGoal.find({userId : userId});
         return { success: true, allTargetGoal };
 
     } catch (error) {
         return { success: false }
-    }
-}
-
-export const getTargetGoalWithId = async (id) => {
-    try {
-        const targetGoal = await TargetGoal.findById(id)
-        if (targetGoal) {
-            return targetGoal
-        }
-        return false
-
-    } catch (error) {
-        return false
     }
 }
 

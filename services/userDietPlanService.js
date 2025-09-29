@@ -15,9 +15,9 @@ export const createUserDietPlanService = async (data) => {
     }
 }
 
-export const getAllUserDietPlanService = async () => {
+export const getExpiredUserDietPlanService = async (userId) => {
     try {
-        const allUserDietPlan = await UserDietPlan.find();
+        const allUserDietPlan = await UserDietPlan.find({ userId: userId,  endDate: { $lt: today } } );;
         return { success: true, allUserDietPlan };
 
     } catch (error) {
@@ -25,9 +25,12 @@ export const getAllUserDietPlanService = async () => {
     }
 }
 
-export const getUserDietPlanWithId = async (id) => {
+export const getUserCurrentDietPlansService = async (userId) => {
     try {
-        const userDietPlan = await UserDietPlan.findById(id)
+        const userDietPlan = await UserDietPlan.find({
+            userId: userId, startDate: { $lte: today },
+            endDate: { $gte: today }
+        });
         if (userDietPlan) {
             return userDietPlan
         }
@@ -35,22 +38,6 @@ export const getUserDietPlanWithId = async (id) => {
 
     } catch (error) {
         return false
-    }
-}
-
-export const updateUserDietPlanService = async (id, data) => {
-    try {
-        const updatedUserDietPlan = await UserDietPlan.findByIdAndUpdate(id, data);
-        if (updatedUserDietPlan) {
-            return { success: true, message: "UserDietPlan updated succesfully" }
-        } else {
-            return { success: false, message: "Failed to update" }
-        }
-
-    } catch (error) {
-        console.log(error);
-        return { success: false }
-
     }
 }
 

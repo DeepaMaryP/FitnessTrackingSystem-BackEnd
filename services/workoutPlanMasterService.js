@@ -1,6 +1,6 @@
 import WorkOutPlanMaster from "../models/workOutPlanMaster.js";
 
-export const createWorkOutPlanMaster = async (data) => {
+export const createWorkOutPlanMasterService = async (data) => {
     try {
         let newWorkOutPlanMaster = new WorkOutPlanMaster(data);
         newWorkOutPlanMaster = await newWorkOutPlanMaster.save();

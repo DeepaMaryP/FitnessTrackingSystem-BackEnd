@@ -16,11 +16,8 @@ const workoutPlanMasterSchema = new mongoose.Schema({
       rest_sec: { type: Number, default: 60 },
       met: { type: Number, required: true } // MET value for calories calculation
     }
-  ],
-
-  created_by: { type: mongoose.Schema.Types.ObjectId, ref: "User" },
-  created_at: { type: Date, default: Date.now }
-});
+  ],  
+}, { timestamps: true });
 
 const WorkoutPlanMaster = model("WorkoutPlanMaster", workoutPlanMasterSchema);
 export default WorkoutPlanMaster

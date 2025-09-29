@@ -1,6 +1,9 @@
 export const validateTrainer = async (req, res, next) => {
-    const { qualification, experience_years, specialization, certification } = req.body
+    const { userId, qualification, experience_years, specialization, certification } = req.body
    
+    if (!userId) {
+        return res.status(400).json({ success: false, message: "please enter userId" })
+    }
     if (!qualification) {
         return res.status(400).json({ success: false, message: "please enter qualification" })
     }

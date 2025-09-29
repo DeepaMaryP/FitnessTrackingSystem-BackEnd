@@ -1,12 +1,12 @@
 import UserWorkOutPlan from "../models/userWorkOutPlan.js";
 
-export const createUserWorkOutPlan = async (data) => {
+export const createUserWorkOutPlanService = async (data) => {
     try {
         let newUserWorkOutPlan = new UserWorkOutPlan(data);
         newUserWorkOutPlan = await UserWorkOutPlan.save();
-        return {success : true, UserWorkOutPlan:newUserWorkOutPlan}
+        return { success: true, UserWorkOutPlan: newUserWorkOutPlan }
     } catch (error) {
-        console.log({error});
+        console.log({ error });
         return {
             success: false,
             message: error.message || "Failed to create UserWorkOutPlan",
@@ -15,9 +15,9 @@ export const createUserWorkOutPlan = async (data) => {
     }
 }
 
-export const getAllUserWorkOutPlanService = async () => {
+export const getExpiredUserWorkOutPlanService = async (userId) => {
     try {
-        const allUserWorkOutPlan = await UserWorkOutPlan.find();
+        const allUserWorkOutPlan = await UserWorkOutPlan.find({ userId: userId,  endDate: { $lt: today } } );
         return { success: true, allUserWorkOutPlan };
 
     } catch (error) {
@@ -25,9 +25,12 @@ export const getAllUserWorkOutPlanService = async () => {
     }
 }
 
-export const getUserWorkOutPlanWithId = async (id) => {
+export const getUserCurrentWorkOutPlansService = async (userId) => {
     try {
-        const userWorkOutPlan = await UserWorkOutPlan.findById(id)
+        const userWorkOutPlan = await UserWorkOutPlan.find({
+            userId: userId, startDate: { $lte: today },
+            endDate: { $gte: today }
+        });
         if (userWorkOutPlan) {
             return userWorkOutPlan
         }
@@ -38,28 +41,12 @@ export const getUserWorkOutPlanWithId = async (id) => {
     }
 }
 
-export const updateUserWorkOutPlanService = async (id, data) => {
+export const deleteUserWorkOutPlanService = async (id) => {
     try {
-        const updatedUserWorkOutPlan = await UserWorkOutPlan.findByIdAndUpdate(id, data);
-        if (updatedUserWorkOutPlan) {
-            return { success: true, message: "UserWorkOutPlan updated succesfully" }
-        } else {
-            return { success: false, message: "Failed to update" }
-        }
-
+        await UserWorkOutPlan.findByIdAndDelete(id)
+        return true;
     } catch (error) {
         console.log(error);
-        return { success: false }
-
-    }
-}
-
-export const deleteUserWorkOutPlanService = async(id) =>{
-    try {
-       await UserWorkOutPlan.findByIdAndDelete(id)
-       return true;
-    } catch (error) {
-        console.log(error);
-        return false;        
+        return false;
     }
 }

@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import { createTrainerProfileService, deleteTrainerProfileService, getAllTrainersProfileService, getTrainerProfileWithId, updateTrainerProfileService } from "../services/trainerProfileService.js";
+import { approveTrainerService, createTrainerProfileService, deleteTrainerProfileService, getAllTrainersProfileService, getApprovedTrainerCountService, getPendingTrainerCountService, getTrainerProfileWithId, updateTrainerProfileService, updateVerificationDocumentService } from "../services/trainerProfileService.js";
 
 export const createTrainerProfile = async (req, res) => {
     let data = req.body  
@@ -38,6 +38,24 @@ export const getTrainerProfileById = async (req, res) => {
     }
 }
 
+export const getApprovedTrainerCount = async (req, res) => {
+    const response = await getApprovedTrainerCountService();
+    if (response.success)
+        return res.status(200).send(response);
+    else {
+        return res.status(500).json({ success: false, message: "Failed to get Trainer Count" });
+    }
+}
+
+export const getPendingTrainerCount = async (req, res) => {
+    const response = await getPendingTrainerCountService();
+    if (response.success)
+        return res.status(200).send(response);
+    else {
+        return res.status(500).json({ success: false, message: "Failed to get Trainer Count" });
+    }
+}
+
 export const updateTrainerProfile = async (req, res) => {
     const response = await updateTrainerProfileService(req.params.userId, req.body)
     if (response.success) {
@@ -53,5 +71,23 @@ export const deleteTrainerProfile = async (req, res) => {
         return res.status(200).json({ success: true, message: "TrainerProfile deleted successfully" })
     } else {
         return res.status(500).json({ success: false, message: "Failed to delete TrainerProfile" });
+    }
+}
+
+export const approveTrainers = async (req, res) => {
+    const response = await approveTrainerService(req.params.userId, req.body)
+    if (response) {
+        return res.status(200).json({ success: true, message: "TrainerProfile approved successfully" })
+    } else {
+        return res.status(500).json({ success: false, message: "Failed to approve TrainerProfile" });
+    }
+}
+
+export const updateVerificationDocuments = async (req, res) => {
+    const response = await updateVerificationDocumentService(req.params.userId, req.body)
+    if (response) {
+        return res.status(200).json({ success: true, message: "Documents submitted successfully" })
+    } else {
+        return res.status(500).json({ success: false, message: "Failed to approve documents" });
     }
 }

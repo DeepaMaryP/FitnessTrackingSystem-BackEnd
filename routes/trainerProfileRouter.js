@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { handleAuth } from "../middleware/auth.js";
 import { validateTrainer } from "../middleware/trainerProfileMiddleware.js";
-import { createTrainerProfile, deleteTrainerProfile, getTrainerProfileById, getTrainersProfile, updateTrainerProfile } from "../controller/trainerProfileController.js";
+import { approveTrainers, createTrainerProfile, deleteTrainerProfile, getApprovedTrainerCount, getPendingTrainerCount, getTrainerProfileById, getTrainersProfile, updateTrainerProfile, updateVerificationDocuments } from "../controller/trainerProfileController.js";
 import { validateUser } from "../middleware/userMiddleware.js";
 
 const router = Router()
@@ -9,12 +9,15 @@ const router = Router()
 //admin
 router.route("/").post(validateUser, validateTrainer, handleAuth, createTrainerProfile);
 router.route("/").get(handleAuth, getTrainersProfile)
+router.route("/dash/approved").get(handleAuth, getApprovedTrainerCount)
+router.route("/dash/pending").get(handleAuth, getPendingTrainerCount)
 router.route("/:userId").get(handleAuth, getTrainerProfileById)
+
 router.route("/:userId").patch(handleAuth, updateTrainerProfile)
+router.route("/verify/:userId").patch(handleAuth, approveTrainers)
 router.route("/:userId").delete(handleAuth, deleteTrainerProfile)
 
-
 //trainer
-//update doc pending
+router.route("/cert/:userId").patch(handleAuth, updateVerificationDocuments)
 
 export default router;

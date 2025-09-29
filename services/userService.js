@@ -4,9 +4,9 @@ export const createUserService = async (data) => {
     try {
         let newUser = new User(data);
         newUser = await newUser.save();
-        return {success : true, user:newUser}
+        return { success: true, user: newUser }
     } catch (error) {
-        console.log({error});
+        console.log({ error });
         return {
             success: false,
             message: error.message || "Failed to create user",
@@ -37,6 +37,54 @@ export const getAllUsersService = async () => {
     }
 }
 
+export const getUsersCountForDashboardService = async () => {
+    try {
+        const userCounts = await User.aggregate([
+            { $match: { role: "User" } }, // Exclude Admin & Trainer
+            {
+                $group: {
+                    _id: null,
+                    totalRegisteredUsers: { $sum: 1 },
+                    activeUsers: { $sum: { $cond: [{ $eq: ["$status", "Active"] }, 1, 0] } },
+                }
+            }
+        ]);
+
+        return { success: true, userCounts };
+
+    } catch (error) {
+        console.log(error);
+        return { success: false }
+    }
+}
+
+export const getUserStatisticsService = async () => {
+    try {
+        const sixMonthAgo = new Date();
+        sixMonthAgo.setMonth((new Date().getMonth() - 6));
+
+        const userCounts = await User.aggregate([
+            { $match: { createdAt: { $gte: sixMonthAgo } } },
+            {
+                $group: {
+                    _id: {
+                        year: { $year: "$createdAt" },
+                        month: { $month: "$createdAt" }
+                    }, count: { $sum: 1 }
+                }
+            },
+              {  $sort: { "_id.year": 1, "_id.month": 1 }}
+        ]);
+
+        return { success: true, userCounts };
+
+    } catch (error) {
+        console.log(error);
+        return { success: false }
+    }
+}
+
+
 export const getUserWithId = async (id) => {
     try {
         const user = await User.findById(id)
@@ -66,12 +114,12 @@ export const updateUserService = async (id, data) => {
     }
 }
 
-export const deleteUserService = async(id) =>{
+export const deleteUserService = async (id) => {
     try {
-       await User.findByIdAndUpdate(id, { $set: { status: "InActive" } } )
-       return true;
+        await User.findByIdAndUpdate(id, { $set: { status: "InActive" } })
+        return true;
     } catch (error) {
         console.log(error);
-        return false;        
+        return false;
     }
 }

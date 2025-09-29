@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+import { model, Schema } from "mongoose";
 
-const paymentPlanMasterSchema = new mongoose.Schema({
+const paymentPlanMasterSchema = new Schema({
     plan_name: { type: String, required: true },
     description: { type: String },
     price: { type: Number, required: true },
@@ -16,9 +16,7 @@ const paymentPlanMasterSchema = new mongoose.Schema({
         diet_plan_access: { type: Boolean, default: false },
         workout_plan_access: { type: Boolean, default: false },
         yoga_plan_access: { type: Boolean, default: false },
-        customizations_allowed: { type: Number, default: 0 } // how many times user can request custom modifications
-    }, is_active: {
-        type: Boolean, default: true
+        status: { type: String, enum: ["Active", "Approved", "InActive"], default: "Active" }
     },
 },{ timestamps: true });
 

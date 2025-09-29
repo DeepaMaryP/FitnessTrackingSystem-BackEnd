@@ -16,13 +16,13 @@ export const createTrainerProfileService = async (data) => {
 
         // Step 2: create trainer profile
 
-         const { qualification, experience_years, specialization, certification } = data
+        const { qualification, experience_years, specialization, certification } = data
         await TrainerProfile.create([{
             user_id: newUser[0]._id,
             qualification, experience_years, specialization, certification
         }], { session });
 
-        await session.commitTransaction();       
+        await session.commitTransaction();
         return { success: true, trainerProfile: newUser[0] }
 
     } catch (error) {
@@ -49,6 +49,7 @@ export const getAllTrainersProfileService = async () => {
 
 export const getTrainerProfileWithId = async (id) => {
     try {
+        console.log('hh');
         const trainerProfile = await TrainerProfile.findById(id)
         if (trainerProfile) {
             return trainerProfile
@@ -56,6 +57,36 @@ export const getTrainerProfileWithId = async (id) => {
         return false
 
     } catch (error) {
+        return false
+    }
+}
+
+export const getApprovedTrainerCountService = async () => {
+    try {               
+        const approvedTrainerCount = await TrainerProfile.countDocuments({
+            approvedStatus: "approved"
+        });       
+            
+        return { success: true, count: approvedTrainerCount}
+                       
+    } catch (error) {
+        console.log(error);
+        
+        return false
+    }
+}
+
+export const getPendingTrainerCountService = async () => {
+    try {               
+        const approvedTrainerCount = await TrainerProfile.countDocuments({
+            approvedStatus: "pending"
+        });       
+            
+        return { success: true, count: approvedTrainerCount}
+                       
+    } catch (error) {
+        console.log(error);
+        
         return false
     }
 }
@@ -79,6 +110,26 @@ export const updateTrainerProfileService = async (id, data) => {
 export const deleteTrainerProfileService = async (id) => {
     try {
         await TrainerProfile.findByIdAndUpdate(id, { $set: { availability_status: "inactive" } })
+        return true;
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+}
+
+export const approveTrainerService = async (id, data) => {
+    try {
+        await TrainerProfile.findByIdAndUpdate(id, { $set: { approvedStatus: "Approved", approvedBy: data, approvedAt: new Date() } })
+        return true;
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+}
+
+export const updateVerificationDocumentService = async (id, data) => {
+    try {
+        await TrainerProfile.findByIdAndUpdate(id, { $set: { certification: data } })
         return true;
     } catch (error) {
         console.log(error);
