@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { createUserService, deleteUserService, getAllUsersService, getUserDetailsWithEmail, getUsersCountForDashboardService, getUserStatisticsService, getUserWithId, updateUserService } from "../services/userService.js"
+import { createUserService, createUserTrainerService, deleteUserService, getAllUsersService, getUserDetailsWithEmail, getUsersCountForDashboardService, getUserStatisticsService, getUserWithId, updateUserService, updateUserTrainerService } from "../services/userService.js"
 
 export const loginUser = async (req, res) => {
     try {
@@ -32,6 +32,23 @@ export const createUser = async (req, res) => {
     data.passwordHash = updatedPassword
 
     const result = await createUserService(data)
+    if (result.success) {
+        return res.status(201).json({ success: true, userName: result.user.email, message: "User created successfully" })
+    } else {
+        return res.status(500).json({
+            success: false,
+            message: result.message,
+            errors: result.errors,
+        });
+    }
+}
+
+export const createUserTrainer = async (req, res) => {
+    let {user, trainer} = req.body
+    const updatedPassword = await bcrypt.hash(user.passwordHash, 10)
+    user.passwordHash = updatedPassword
+
+    const result = await createUserTrainerService(user, trainer)
     if (result.success) {
         return res.status(201).json({ success: true, userName: result.user.email, message: "User created successfully" })
     } else {
@@ -108,6 +125,29 @@ export const getUserById = async (req, res) => {
 
 export const updateUser = async (req, res) => {
     const response = await updateUserService(req.params.userId, req.body)
+    if (response.success) {
+        return res.status(200).send(response)
+    } else {
+        return res.status(500).json({ success: false, message: "Failed to update user" });
+    }
+}
+
+export const updateUserTrainer = async (req, res) => {
+    const {user, trainer} = req.body;
+    const response = await updateUserTrainerService(req.params.userId, user, trainer)
+    if (response.success) {
+        return res.status(200).send(response)
+    } else {
+        return res.status(500).json({ success: false, message: "Failed to update user" });
+    }
+}
+
+export const updateUserPassword = async (req, res) => {
+    let data = req.body
+    const updatedPassword = await bcrypt.hash(data.passwordHash, 10)
+    data.passwordHash = updatedPassword
+
+    const response = await updateUserService(req.params.userId, data)
     if (response.success) {
         return res.status(200).send(response)
     } else {

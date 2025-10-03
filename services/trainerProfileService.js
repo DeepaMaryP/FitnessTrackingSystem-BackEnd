@@ -47,10 +47,9 @@ export const getAllTrainersProfileService = async () => {
     }
 }
 
-export const getTrainerProfileWithId = async (id) => {
-    try {
-        console.log('hh');
-        const trainerProfile = await TrainerProfile.findById(id)
+export const getTrainerProfileWithUserId = async (id) => {
+    try {      
+        const trainerProfile = await TrainerProfile.findOne({ userId: id });              
         if (trainerProfile) {
             return trainerProfile
         }

@@ -4,7 +4,7 @@ const trainerProfileSchema = new Schema(
     {
         userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
         qualification: { type: String, required: true },
-        experience_years: { type: String, required: true, unique: true },
+        experience_years: { type: String, required: true},
         specialization: { type: String, required: true },
         certification:{ type: String, required: true },
         approvedStatus:{ type: String, enum: ['pending','approved','blocked'], default: "pending" },

@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import { approveTrainerService, createTrainerProfileService, deleteTrainerProfileService, getAllTrainersProfileService, getApprovedTrainerCountService, getPendingTrainerCountService, getTrainerProfileWithId, updateTrainerProfileService, updateVerificationDocumentService } from "../services/trainerProfileService.js";
+import { approveTrainerService, createTrainerProfileService, deleteTrainerProfileService, getAllTrainersProfileService, getApprovedTrainerCountService, getPendingTrainerCountService, getTrainerProfileWithUserId, updateTrainerProfileService, updateVerificationDocumentService } from "../services/trainerProfileService.js";
 
 export const createTrainerProfile = async (req, res) => {
     let data = req.body  
@@ -29,8 +29,8 @@ export const getTrainersProfile = async (req, res) => {
     }
 }
 
-export const getTrainerProfileById = async (req, res) => {
-    const response = await getTrainerProfileWithId(req.params.userId);
+export const getTrainerProfileByUserId = async (req, res) => {           
+    const response = await getTrainerProfileWithUserId(req.params.userId);
     if (response)
         return res.status(200).send(response);
     else {

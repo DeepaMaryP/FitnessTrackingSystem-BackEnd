@@ -1,3 +1,5 @@
+import mongoose from "mongoose";
+import TrainerProfile from "../models/trainerProfile.js";
 import User from "../models/user.js";
 
 export const createUserService = async (data) => {
@@ -15,6 +17,36 @@ export const createUserService = async (data) => {
     }
 }
 
+export const createUserTrainerService = async (userDet, trainerDet) => {
+    const { _id, ...user } = userDet;
+    const { _id: tId, ...trainer } = trainerDet;
+
+    const session = await mongoose.startSession();
+    session.startTransaction();
+
+    try {
+        let newUser = new User(user);
+        newUser = await newUser.save({ session });
+        trainer.userId = newUser._id //assign the new userid to trainer profile
+
+        let newTrainer = new TrainerProfile(trainer);
+        newTrainer = await newTrainer.save({ session });
+
+        await session.commitTransaction();
+        return { success: true, user: newUser, trainer: newTrainer }
+    } catch (error) {
+        console.log({ error });
+        await session.abortTransaction();
+        return {
+            success: false,
+            message: error.message || "Failed to create user trainer",
+            errors: error.errors || null, // contains field-level details (phone, email etc.)
+        };
+    } finally {
+        session.endSession();
+    }
+}
+
 export const getUserDetailsWithEmail = async (email) => {
     try {
         const user = await User.findOne({ email })
@@ -29,7 +61,7 @@ export const getUserDetailsWithEmail = async (email) => {
 
 export const getAllUsersService = async () => {
     try {
-        const allUsers = await User.find();
+        const allUsers = await User.find({ status: "Active" });
         return { success: true, allUsers };
 
     } catch (error) {
@@ -73,7 +105,7 @@ export const getUserStatisticsService = async () => {
                     }, count: { $sum: 1 }
                 }
             },
-              {  $sort: { "_id.year": 1, "_id.month": 1 }}
+            { $sort: { "_id.year": 1, "_id.month": 1 } }
         ]);
 
         return { success: true, userCounts };
@@ -111,6 +143,31 @@ export const updateUserService = async (id, data) => {
         console.log(error);
         return { success: false }
 
+    }
+}
+
+export const updateUserTrainerService = async (id, user, trainer) => {
+    const session = await mongoose.startSession();
+    session.startTransaction();
+    try {
+        const updatedUser = await User.findByIdAndUpdate(id, user, { new: true, session });
+        await TrainerProfile.updateOne({ userId: id }, trainer, { session });
+
+        await session.commitTransaction();
+
+        if (updatedUser) {
+            return { success: true, message: "User updated succesfully" }
+        } else {
+            return { success: false, message: "Failed to update" }
+        }
+
+    } catch (error) {
+        console.log(error);
+        await session.abortTransaction();
+        return { success: false }
+
+    } finally {
+        session.endSession();
     }
 }
 
