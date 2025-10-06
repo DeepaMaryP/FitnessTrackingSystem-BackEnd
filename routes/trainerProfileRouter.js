@@ -14,7 +14,7 @@ router.route("/dash/pending").get(handleAuth, getPendingTrainerCount)
 router.route("/:userId").get(handleAuth, getTrainerProfileByUserId)
 
 router.route("/:userId").patch(handleAuth, updateTrainerProfile)
-router.route("/verify/:userId").patch(handleAuth, approveTrainers)
+router.route("/verify/:id").patch(handleAuth, approveTrainers)
 router.route("/:userId").delete(handleAuth, deleteTrainerProfile)
 
 //trainer

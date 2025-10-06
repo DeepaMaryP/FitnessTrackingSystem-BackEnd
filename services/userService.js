@@ -17,10 +17,7 @@ export const createUserService = async (data) => {
     }
 }
 
-export const createUserTrainerService = async (userDet, trainerDet) => {
-    const { _id, ...user } = userDet;
-    const { _id: tId, ...trainer } = trainerDet;
-
+export const createUserTrainerService = async (user, trainer) => {    
     const session = await mongoose.startSession();
     session.startTransaction();
 
@@ -69,14 +66,14 @@ export const getAllUsersService = async () => {
     }
 }
 
-export const getUsersCountForDashboardService = async () => {
+export const getUsersMetricsForDashboardService = async () => {
     try {
         const userCounts = await User.aggregate([
             { $match: { role: "User" } }, // Exclude Admin & Trainer
             {
                 $group: {
                     _id: null,
-                    totalRegisteredUsers: { $sum: 1 },
+                    totalRegdUsers: { $sum: 1 },
                     activeUsers: { $sum: { $cond: [{ $eq: ["$status", "Active"] }, 1, 0] } },
                 }
             }

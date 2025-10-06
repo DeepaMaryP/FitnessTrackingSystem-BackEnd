@@ -39,7 +39,7 @@ export const createTrainerProfileService = async (data) => {
 
 export const getAllTrainersProfileService = async () => {
     try {
-        const allTrainersProfile = await TrainerProfile.find();
+        const allTrainersProfile = await TrainerProfile.find().populate('userId', 'name'); ;
         return { success: true, allTrainersProfile };
 
     } catch (error) {
@@ -117,8 +117,8 @@ export const deleteTrainerProfileService = async (id) => {
 }
 
 export const approveTrainerService = async (id, data) => {
-    try {
-        await TrainerProfile.findByIdAndUpdate(id, { $set: { approvedStatus: "Approved", approvedBy: data, approvedAt: new Date() } })
+    try {    
+        await TrainerProfile.findByIdAndUpdate(id, { $set: { approvedStatus: "approved", approvedBy: data, approvedAt: new Date() } })
         return true;
     } catch (error) {
         console.log(error);

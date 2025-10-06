@@ -21,7 +21,7 @@ app.use('/api/user', userRouter)
 app.use('/api/profile', userProfileRouter)
 app.use('/api/trainer', trainerProfileRouter)
 app.use('/api/usertrainer', userTrainerRouter)
-app.use('/api/payment', paymentPlanRouter)
+app.use('/api/fitplans', paymentPlanRouter)
 app.use('/api/userpayment', userPaymentRouter)
 
 app.listen(3000, ()=>{

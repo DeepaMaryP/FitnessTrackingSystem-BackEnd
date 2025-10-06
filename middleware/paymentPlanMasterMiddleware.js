@@ -1,8 +1,8 @@
 
 export const validatePaymentPlan = async (req, res, next) => {
-    const { plan_name, price, duration_days, trainer_type } = req.body
+    const { name, price, duration_days, features } = req.body
 
-    if (!plan_name) {
+    if (!name) {
         return res.status(400).json({ success: false, message: "please enter Plan name" })
     }
     if (!price) {
@@ -12,10 +12,13 @@ export const validatePaymentPlan = async (req, res, next) => {
         return res.status(400).json({ success: false, message: "please enter duration" })
     }
 
-    if (!trainer_type) {
-        return res.status(400).json({ success: false, message: "please enter trainer type" })
-    }
-
+    features?.trainers?.map(
+        trainer => {
+            if (trainer.trainer_type.length == 0) {
+                return res.status(400).json({ success: false, message: "please enter trainer type" })
+            }
+        }
+    )
     next()
 
 }

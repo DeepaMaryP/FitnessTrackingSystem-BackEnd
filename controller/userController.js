@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { createUserService, createUserTrainerService, deleteUserService, getAllUsersService, getUserDetailsWithEmail, getUsersCountForDashboardService, getUserStatisticsService, getUserWithId, updateUserService, updateUserTrainerService } from "../services/userService.js"
+import { createUserService, createUserTrainerService, deleteUserService, getAllUsersService, getUserDetailsWithEmail, getUsersMetricsForDashboardService, getUserStatisticsService, getUserWithId, updateUserService, updateUserTrainerService } from "../services/userService.js"
 
 export const loginUser = async (req, res) => {
     try {
@@ -19,7 +19,7 @@ export const loginUser = async (req, res) => {
         const token = jwt.sign({ name: user.name, email: user.email, id: user._id }, process.env.JWT_SECRET, {
             expiresIn: '1h'
         })
-        res.status(200).json({ success: true, token, name: user.name })
+        res.status(200).json({ success: true, token, name: user.name, userId:user._Id })
     } catch (error) {
         console.log(error);
         return res.status(500).json({ success: false, message: "Failed to sign in" });
@@ -69,8 +69,8 @@ export const getUsers = async (req, res) => {
     }
 }
 
-export const getUsersCount = async (req, res) => {
-    const response = await getUsersCountForDashboardService();
+export const getUserMetrics = async (req, res) => {
+    const response = await getUsersMetricsForDashboardService();
     if (response.success)
         return res.status(200).send(response);
     else {
@@ -105,9 +105,8 @@ export const getUserStatistics = async (req, res) => {
                 registrations: match ? match.count : 0
             };
         });
-
-        console.log(monthsList);
-        return res.status(200).send(monthsList);
+        
+        return res.status(200).json({success:true, monthsList: monthsList});
     }
     else {
         return res.status(500).json({ success: false, message: "Failed to get users statistics" });

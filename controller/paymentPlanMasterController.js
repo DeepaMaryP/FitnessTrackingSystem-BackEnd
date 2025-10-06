@@ -15,7 +15,7 @@ export const createPaymentPlan = async (req, res) => {
 }
 
 
-export const getPaymentPlans = async (req, res) => {
+export const getPaymentPlans = async (req, res) => {     
     const response = await getAllPaymentPlanService();
     if (response.success)
         return res.status(200).send(response);

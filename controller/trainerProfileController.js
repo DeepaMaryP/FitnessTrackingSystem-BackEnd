@@ -74,8 +74,8 @@ export const deleteTrainerProfile = async (req, res) => {
     }
 }
 
-export const approveTrainers = async (req, res) => {
-    const response = await approveTrainerService(req.params.userId, req.body)
+export const approveTrainers = async (req, res) => {  
+    const response = await approveTrainerService(req.params.id, req.body)
     if (response) {
         return res.status(200).json({ success: true, message: "TrainerProfile approved successfully" })
     } else {

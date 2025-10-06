@@ -1,7 +1,7 @@
 import { model, Schema } from "mongoose";
 
 const paymentPlanMasterSchema = new Schema({
-    plan_name: { type: String, required: true },
+    name: { type: String, required: true },
     description: { type: String },
     price: { type: Number, required: true },
     duration_days: { type: Number, required: true },// e.g., 30 (monthly), 90 (quarterly), 365 (yearly)
