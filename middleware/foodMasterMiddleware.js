@@ -1,6 +1,6 @@
 
 export const validateFoodMaster = async (req, res, next) => {
-    const { name, category, serving_size, serving_unit, calories } = req.body
+    const { name, category, serving_size, serving_unit, calories,protein_g,carbs_g } = req.body
 
     if (!name) {
         return res.status(400).json({ success: false, message: "please enter name" })

@@ -17,8 +17,8 @@ export const createWorkOutPlanMasterService = async (data) => {
 
 export const getAllWorkOutPlanMasterService = async () => {
     try {
-        const allWorkOutPlanMaster = await WorkOutPlanMaster.find();
-        return { success: true, allWorkOutPlanMaster };
+        const allWorkOutPlans = await WorkOutPlanMaster.find();
+        return { success: true, allWorkOutPlans };
 
     } catch (error) {
         return { success: false }

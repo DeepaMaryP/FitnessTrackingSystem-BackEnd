@@ -1,9 +1,8 @@
-import { createFoodMasterService, deleteFoodMasterService, getAllFoodMasterService, getFoodMasterWithId, updateFoodMasterService } from "../services/foodMasterService";
-
+import { createFoodMasterService, deleteFoodMasterService, getAllFoodMasterService, getFoodMasterWithId, updateFoodMasterService } from "../services/foodMasterService.js";
 
 export const createFoodMaster = async (req, res) => {
-    let data = req.body
-    const result = await createFoodMasterService(data)
+    let data = req.body  
+    const result = await createFoodMasterService(data)    
     if (result.success) {
         return res.status(201).json({ success: true, message: "FoodMaster created successfully" })
     } else {
@@ -15,9 +14,8 @@ export const createFoodMaster = async (req, res) => {
     }
 }
 
-
 export const getFoodMaster = async (req, res) => {
-    const response = await getAllFoodMasterService();
+    const response = await getAllFoodMasterService();   
     if (response.success)
         return res.status(200).send(response);
     else {

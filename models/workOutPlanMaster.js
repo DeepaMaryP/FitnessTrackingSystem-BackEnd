@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+import mongoose, { model, Schema } from "mongoose";
 
-const workoutPlanMasterSchema = new mongoose.Schema({
+const workoutPlanMasterSchema = new Schema({
   name: { type: String, required: true },
   description: { type: String },
   duration_days: { type: Number, required: true },

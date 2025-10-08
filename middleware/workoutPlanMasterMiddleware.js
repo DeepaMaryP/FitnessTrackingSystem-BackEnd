@@ -1,6 +1,5 @@
 export const validateWorkOutPlan = async (req, res, next) => {
-    const { name, duration_days, exercises} = req.body
-
+    const { name, duration_days, exercises} = req.body    
     if (!name) {
         return res.status(400).json({ success: false, message: "please enter name" })
     }
@@ -10,6 +9,5 @@ export const validateWorkOutPlan = async (req, res, next) => {
     if (!exercises) {
         return res.status(400).json({ success: false, message: "please enter exercises" })
     }   
-
     next()
 }

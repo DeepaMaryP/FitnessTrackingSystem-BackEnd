@@ -1,7 +1,7 @@
-import { createWorkOutPlanMasterService, deleteWorkOutPlanMasterService, getAllWorkOutPlanMasterService, getWorkOutPlanMasterWithId, updateWorkOutPlanMasterService } from "../services/workoutPlanMasterService";
+import { createWorkOutPlanMasterService, deleteWorkOutPlanMasterService, getAllWorkOutPlanMasterService, getWorkOutPlanMasterWithId, updateWorkOutPlanMasterService } from "../services/workoutPlanMasterService.js";
 
 export const createWorkOutPlan = async (req, res) => {
-    let data = req.body
+    let data = req.body    
     const result = await createWorkOutPlanMasterService(data)
     if (result.success) {
         return res.status(201).json({ success: true, message: "WorkOutPlan created successfully" })
