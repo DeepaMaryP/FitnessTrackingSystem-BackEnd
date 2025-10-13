@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import { approveTrainerService, createTrainerProfileService, deleteTrainerProfileService, getAllTrainersProfileService, getApprovedTrainerCountService, getPendingTrainerCountService, getTrainerProfileWithUserId, updateTrainerProfileService, updateVerificationDocumentService } from "../services/trainerProfileService.js";
+import { approveTrainerService, createTrainerProfileService, deleteTrainerProfileService, getAllTrainersProfileService, getApprovedTrainerCountService, getApprovedTrainersProfileService, getPendingTrainerCountService, getTrainerProfileWithUserId, updateTrainerProfileService, updateVerificationDocumentService } from "../services/trainerProfileService.js";
 
 export const createTrainerProfile = async (req, res) => {
     let data = req.body  
@@ -19,9 +19,17 @@ export const createTrainerProfile = async (req, res) => {
     }
 }
 
-
 export const getTrainersProfile = async (req, res) => {
     const response = await getAllTrainersProfileService();
+    if (response.success)
+        return res.status(200).send(response);
+    else {
+        return res.status(500).json({ success: false, message: "Failed to get TrainerProfile" });
+    }
+}
+
+export const getApprovedTrainers = async (req, res) => {
+    const response = await getApprovedTrainersProfileService();    
     if (response.success)
         return res.status(200).send(response);
     else {

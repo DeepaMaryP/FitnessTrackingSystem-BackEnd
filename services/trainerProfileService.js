@@ -39,7 +39,18 @@ export const createTrainerProfileService = async (data) => {
 
 export const getAllTrainersProfileService = async () => {
     try {
-        const allTrainersProfile = await TrainerProfile.find().populate('userId', 'name'); ;
+        const allTrainersProfile = await TrainerProfile.find().populate('userId', 'name');
+        return { success: true, allTrainersProfile };
+
+    } catch (error) {
+        return { success: false }
+    }
+}
+
+export const getApprovedTrainersProfileService = async () => {
+    try {
+        const allTrainersProfile = await TrainerProfile.find({approvedStatus:
+            'approved'} ).populate('userId', 'name'); ;
         return { success: true, allTrainersProfile };
 
     } catch (error) {

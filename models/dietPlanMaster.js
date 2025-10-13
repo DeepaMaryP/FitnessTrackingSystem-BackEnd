@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+import mongoose, { model, Schema } from "mongoose";
 
-const dietPlanMasterSchema = new mongoose.Schema({
+const dietPlanMasterSchema = new Schema({
     plan_name: { type: String, required: true },
     goal_type: { type: String, enum: ["Weight Loss", "Weight Gain", "Maintain", "Custom"], default: "Custom" },
     total_calories: { type: Number, required: true },
@@ -14,7 +14,7 @@ const dietPlanMasterSchema = new mongoose.Schema({
             food_items: [
                 {
                     food_id: {
-                        type: mongoose.Schema.Types.ObjectId, ref: "FoodMaster", required: true
+                        type: Schema.Types.ObjectId, ref: "FoodMaster", required: true
                     },
                     quantity: { type: Number, required: true },
                     unit: { type: String, required: true },
@@ -29,7 +29,7 @@ const dietPlanMasterSchema = new mongoose.Schema({
             food_items: [
                 {
                     food_id: {
-                        type: mongoose.Schema.Types.ObjectId, ref: "FoodMaster", required: true
+                        type: Schema.Types.ObjectId, ref: "FoodMaster", required: true
                     },
                     quantity: { type: Number, required: true },
                     unit: { type: String, required: true },
@@ -44,7 +44,7 @@ const dietPlanMasterSchema = new mongoose.Schema({
             food_items: [
                 {
                     food_id: {
-                        type: mongoose.Schema.Types.ObjectId, ref: "FoodMaster", required: true
+                        type: Schema.Types.ObjectId, ref: "FoodMaster", required: true
                     },
                     quantity: { type: Number, required: true },
                     unit: { type: String, required: true },
@@ -58,7 +58,7 @@ const dietPlanMasterSchema = new mongoose.Schema({
         Snack: {
             food_items: [
                 {
-                    food_id: { type: mongoose.Schema.Types.ObjectId, ref: "FoodMaster", required: true },
+                    food_id: { type: Schema.Types.ObjectId, ref: "FoodMaster", required: true },
                     quantity: { type: Number, required: true },
                     unit: { type: String, required: true },
                     calories: { type: Number, required: true },
@@ -68,9 +68,8 @@ const dietPlanMasterSchema = new mongoose.Schema({
                 }
             ]
         }
-    },
-    timestamps: true
-});
+    }   
+},{ timestamps: true });
 
 const DietPlanMaster = model("DietPlanMaster", dietPlanMasterSchema);
 export default DietPlanMaster

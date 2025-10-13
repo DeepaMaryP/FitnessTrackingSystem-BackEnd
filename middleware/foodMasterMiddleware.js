@@ -1,6 +1,6 @@
 
 export const validateFoodMaster = async (req, res, next) => {
-    const { name, category, serving_size, serving_unit, calories,protein_g,carbs_g } = req.body
+    const { name, category, serving_size, serving_unit, calories,protein_g,carbs_g, alternate_units } = req.body
 
     if (!name) {
         return res.status(400).json({ success: false, message: "please enter name" })
@@ -26,6 +26,13 @@ export const validateFoodMaster = async (req, res, next) => {
      if (!carbs_g) {
         return res.status(400).json({ success: false, message: "please enter carbs_g" })
     }    
+
+    alternate_units?.map(unit => {
+        if(unit.name =="")
+        {
+            return res.status(400).json({ success: false, message: "please enter name of Alternative Unit" })
+        }
+    })
 
     next()
 

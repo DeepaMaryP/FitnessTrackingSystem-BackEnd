@@ -1,6 +1,6 @@
 import bcrypt from "bcryptjs";
 import jwt from "jsonwebtoken";
-import { createUserService, createUserTrainerService, deleteUserService, getAllUsersService, getUserDetailsWithEmail, getUsersMetricsForDashboardService, getUserStatisticsService, getUserWithId, updateUserService, updateUserTrainerService } from "../services/userService.js"
+import { createUserService, createUserTrainerService, deleteUserService, getAllActivePaidUsersService, getAllActiveUnAssignedPaidUsersService, getAllUsersService, getUserDetailsWithEmail, getUsersMetricsForDashboardService, getUserStatisticsService, getUserWithId, updateUserService, updateUserTrainerService } from "../services/userService.js"
 
 export const loginUser = async (req, res) => {
     try {
@@ -62,6 +62,24 @@ export const createUserTrainer = async (req, res) => {
 
 export const getUsers = async (req, res) => {
     const response = await getAllUsersService();
+    if (response.success)
+        return res.status(200).send(response);
+    else {
+        return res.status(500).json({ success: false, message: "Failed to get users" });
+    }
+}
+
+export const getActivePaidUsers = async (req, res) => {
+    const response = await getAllActivePaidUsersService();
+    if (response.success)
+        return res.status(200).send(response);
+    else {
+        return res.status(500).json({ success: false, message: "Failed to get users" });
+    }
+}
+
+export const getActiveUnAssignedPaidUsers = async (req, res) => {
+    const response = await getAllActiveUnAssignedPaidUsersService();
     if (response.success)
         return res.status(200).send(response);
     else {

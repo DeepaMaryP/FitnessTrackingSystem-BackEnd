@@ -11,6 +11,7 @@ import userTrainerRouter from './routes/userTrainerRouter.js'
 import userPaymentRouter from './routes/userPaymentRouter.js'
 import foodMasterRouter from './routes/foodMasterRouter.js'
 import workOutPlanRouter from './routes/workOutPlanMasterRouter.js'
+import dietPlanRouter from './routes/dietPlanMasterRouter.js'
 
 configDotenv()
 connectToDatabase() 
@@ -27,6 +28,7 @@ app.use('/api/usertrainer', userTrainerRouter)
 app.use('/api/fitplans', paymentPlanRouter)
 app.use('/api/userpayment', userPaymentRouter)
 app.use('/api/foodMaster', foodMasterRouter)
+app.use('/api/dietPlan', dietPlanRouter)
 
 //For trainer
 app.use('/api/workoutplan', workOutPlanRouter)

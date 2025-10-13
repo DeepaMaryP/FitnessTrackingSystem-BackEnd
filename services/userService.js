@@ -17,7 +17,7 @@ export const createUserService = async (data) => {
     }
 }
 
-export const createUserTrainerService = async (user, trainer) => {    
+export const createUserTrainerService = async (user, trainer) => {
     const session = await mongoose.startSession();
     session.startTransaction();
 
@@ -59,6 +59,42 @@ export const getUserDetailsWithEmail = async (email) => {
 export const getAllUsersService = async () => {
     try {
         const allUsers = await User.find({ status: "Active" });
+        return { success: true, allUsers };
+
+    } catch (error) {
+        return { success: false }
+    }
+}
+
+export const getAllActiveUnAssignedPaidUsersService = async () => {
+    try {
+        const unassignedUsers = await User.aggregate([
+            {
+                $match: { status: "Active", role: "User" }
+            },
+            {
+                $lookup: {
+                    from: "usertrainers",
+                    localField: "_id",
+                    foreignField: "userId",
+                    as: "assignments"
+                }
+            },
+            {
+                $match: { assignments: { $size: 0 } } // only users with no assignments
+            }
+        ]);
+
+        return { success: true, unassignedUsers };
+
+    } catch (error) {
+        return { success: false }
+    }
+}
+
+export const getAllActivePaidUsersService = async () => {
+    try {
+        const allUsers = await User.find({ status: "Active", role: "User" });
         return { success: true, allUsers };
 
     } catch (error) {
