@@ -47,7 +47,7 @@ export const createUserTrainerService = async (user, trainer) => {
 export const getUserDetailsWithEmail = async (email) => {
     try {
         const user = await User.findOne({ email })
-        if (user) {
+        if (user) {          
             return user
         }
         return false

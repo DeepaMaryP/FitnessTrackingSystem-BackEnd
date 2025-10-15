@@ -6,7 +6,7 @@ export const loginUser = async (req, res) => {
     try {
         const { email, password } = req.body
         const user = await getUserDetailsWithEmail(email)
-
+        
         if (!user) {
             return res.status(400).json({ success: false, message: "user do not exist" })
         }
@@ -16,10 +16,10 @@ export const loginUser = async (req, res) => {
             return res.status(400).json({ success: false, message: "Wrong Password" })
         }
 
-        const token = jwt.sign({ name: user.name, email: user.email, id: user._id }, process.env.JWT_SECRET, {
+        const token = jwt.sign({ name: user.name, email: user.email, id: user._id}, process.env.JWT_SECRET, {
             expiresIn: '1h'
         })
-        res.status(200).json({ success: true, token, name: user.name, userId:user._Id })
+        res.status(200).json({ success: true, token, name: user.name, userId:user._id, role: user.role  })
     } catch (error) {
         console.log(error);
         return res.status(500).json({ success: false, message: "Failed to sign in" });

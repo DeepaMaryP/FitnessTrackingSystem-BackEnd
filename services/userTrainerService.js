@@ -9,7 +9,7 @@ export const createUserTrainerService = async (userTrainer) => {
     const end_date = userTrainer.end_date
 
     try {
-        // Remove old trainer assignments for this user (optional)
+        // Remove old trainer assignments for this user 
         await UserTrainer.deleteMany({ userId }, { session });
 
         // Create new assignments
