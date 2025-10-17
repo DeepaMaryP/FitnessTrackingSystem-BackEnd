@@ -12,6 +12,8 @@ import userPaymentRouter from './routes/userPaymentRouter.js'
 import foodMasterRouter from './routes/foodMasterRouter.js'
 import workOutPlanRouter from './routes/workOutPlanMasterRouter.js'
 import dietPlanRouter from './routes/dietPlanMasterRouter.js'
+import targetGoalRouter from './routes/targetRoleRouter.js'
+import foodTrackerRouter from './routes/userFoodTracketRouter.js'
 
 configDotenv()
 connectToDatabase() 
@@ -22,7 +24,6 @@ app.use(cors())
 
 //For admin
 app.use('/api/user', userRouter)
-app.use('/api/profile', userProfileRouter)
 app.use('/api/trainer', trainerProfileRouter)
 app.use('/api/usertrainer', userTrainerRouter)
 app.use('/api/fitplans', paymentPlanRouter)
@@ -32,6 +33,11 @@ app.use('/api/dietPlan', dietPlanRouter)
 
 //For trainer
 app.use('/api/workoutplan', workOutPlanRouter)
+
+//For User
+app.use('/api/profile', userProfileRouter)
+app.use('/api/targetgoal', targetGoalRouter)
+app.use('/api/foodtracker', foodTrackerRouter)
 
 app.listen(3000, ()=>{
     console.log('Server is running..');    

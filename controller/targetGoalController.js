@@ -1,12 +1,17 @@
-import { createTargetGoalService, getTargetGoalService, updateTargetGoalService } from "../services/targetGoalService";
+import { createTargetGoalService, getTargetGoalService, updateTargetGoalService } from "../services/targetGoalService.js";
 
 export const createTargetGoal = async (req, res) => {
     let data = req.body
-    const result = await createTargetGoalService(data)
+    const startDate = new Date();
+    const endDate = new Date(startDate);
+    endDate.setDate(startDate.getDate() + Number(data.duration_days));
+    const targetGoal = { ...data, start_date: startDate, end_date: endDate }
+
+    const result = await createTargetGoalService(targetGoal)
     if (result.success) {
         return res.status(201).json({ success: true, message: "TargetGoal created successfully" })
     } else {
-       return res.status(500).json({
+        return res.status(500).json({
             success: false,
             message: result.message,
             errors: result.errors,
@@ -16,10 +21,10 @@ export const createTargetGoal = async (req, res) => {
 
 export const getTargetGoal = async (req, res) => {
     const response = await getTargetGoalService(req.params.userId);
-    if (response.success)
+   if (response.success)
         return res.status(200).send(response);
     else {
-        return res.status(500).json({ success: false, message: "Failed to get TargetGoal" });
+        return res.status(500).json(response);
     }
 }
 

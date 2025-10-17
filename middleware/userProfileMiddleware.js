@@ -3,7 +3,6 @@ export const validateUserProfile = async (req, res, next) => {
     if (!userId) {
         return res.status(400).json({ success: false, message: "please enter userId" })
     }
-
     if (!dob) {
         return res.status(400).json({ success: false, message: "please enter Date of Birth" })
     }

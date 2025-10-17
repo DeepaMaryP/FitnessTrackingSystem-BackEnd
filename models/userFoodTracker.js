@@ -1,7 +1,7 @@
-const mongoose = require("mongoose");
+import mongoose, { model } from "mongoose";
 
 const userFoodTrackerSchema = new mongoose.Schema({
-    user_id: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
+    userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
     date: { type: Date, default: Date.now }, // day of logging
     meals: [
         {
