@@ -28,10 +28,10 @@ export const validateFoodTracker = (req, res, next) => {
 
         // If there are food items, validate them
         if (Array.isArray(meal.food_items) && meal.food_items.length > 0) {
-            for (const item of meal.food_items) {              
+            for (const item of meal.food_items) {
                 if (!item.food_id) {
                     return res.status(400).json({
-                       success: false, message: `food_id is required for ${meal.meal_type}`,
+                        success: false, message: `food_id is required for ${meal.meal_type}`,
                     });
                 }
 
@@ -49,11 +49,27 @@ export const validateFoodTracker = (req, res, next) => {
 
                 if (item.calories == null) {
                     return res.status(400).json({
-                       success: false, message: `Calories missing for ${item.food_name || "a food item"} in ${meal.meal_type}`,
+                        success: false, message: `Calories missing for ${item.food_name || "a food item"} in ${meal.meal_type}`,
                     });
                 }
             }
         }
+    }
+
+    next();
+};
+
+
+export const validateFoodTrackerByDates = (req, res, next) => {
+    const { userId, startDate, endDate } = req.query;
+    if (!userId) {
+        return res.status(400).json({ success: false, message: "userId is required" });
+    }
+    if (!startDate) {
+        return res.status(400).json({ success: false, message: "startDate is required" });
+    }
+    if (!endDate) {
+        return res.status(400).json({ success: false, message: "endDate is required" });
     }
 
     next();

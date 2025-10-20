@@ -54,8 +54,35 @@ export const getTodaysFoodTrackerWithUserIdService = async (userId) => {
         tomorrow.setDate(today.getDate() + 1); // start of tomorrow
 
         const userFoodTracker = await UserFoodTracker.findOne({ userId: userId, date: { $gte: today, $lt: tomorrow } })
-                                                                .populate('meals.food_items.food_id', 'name');
+            .populate('meals.food_items.food_id', 'name');
         if (userFoodTracker) {
+            return {
+                success: true, data: userFoodTracker, message: "Food Tracker fetched successfully",
+            };
+        }
+        return {
+            success: true, data: null, message: "Food Tracker not found",
+        };
+
+    } catch (error) {
+        return {
+            success: false,
+            data: null,
+            message: error.message || "Failed to Food Tracker",
+        };
+    }
+}
+
+export const getUserFoodTrackerByDatesService = async (userId, fromdate, todate) => {
+    try {
+        const from = new Date(fromdate);
+        const to = new Date(todate);
+        to.setHours(23, 59, 59, 999);
+        
+        const userFoodTracker = await UserFoodTracker.find({ userId: userId, date: { $gte: from, $lt: to } })
+            .populate('meals.food_items.food_id', 'name');
+
+        if (userFoodTracker) {           
             return {
                 success: true, data: userFoodTracker, message: "Food Tracker fetched successfully",
             };
