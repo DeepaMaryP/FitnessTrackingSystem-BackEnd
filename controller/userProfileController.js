@@ -1,4 +1,4 @@
-import bodyMeasurements from "../models/BodyMeasurements.js";
+import bodyMeasurements from "../models/bodyMeasurement.js";
 import UserProfile from "../models/userProfile.js";
 import { createUserProfileWithMeasurementService, getUserProfileWithId, updateUserProfileService } from "../services/userProfileService.js";
 

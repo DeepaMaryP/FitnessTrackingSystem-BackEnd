@@ -1,12 +1,31 @@
-import BodyMeasurement from "../models/bodyMeasurements.js";
+import mongoose from "mongoose";
+import BodyMeasurement from "../models/bodyMeasurement.js";
 
 export const createBodyMeasurementService = async (data) => {
+    const userId = data.userId
+
+    const startOfDay = new Date();
+    startOfDay.setHours(0, 0, 0, 0);
+
+    const endOfDay = new Date();
+    endOfDay.setHours(23, 59, 59, 999);
+
+    const session = await mongoose.startSession();
+    session.startTransaction();
     try {
-        let newBodyMeasurement = new BodyMeasurement (data);
-        newBodyMeasurement = await newBodyMeasurement.save();
-        return {success : true, BodyMeasurement:newBodyMeasurement}
+        // Remove todays old measurements for this user
+        await BodyMeasurement.deleteMany({ userId, date: { $gte: startOfDay, $lte: endOfDay } }, { session });
+
+        let newBodyMeasurement = new BodyMeasurement(data);
+        newBodyMeasurement = await newBodyMeasurement.save({ session });
+
+        await session.commitTransaction();
+        session.endSession();
+        return { success: true, BodyMeasurement: newBodyMeasurement }
     } catch (error) {
-        console.log({error});
+        await session.abortTransaction();
+        session.endSession();
+        console.log({ error });
         return {
             success: false,
             message: error.message || "Failed to create BodyMeasurement",
@@ -16,15 +35,51 @@ export const createBodyMeasurementService = async (data) => {
 }
 
 
-export const getCurrentBodyMeasurementService = async (userId) => {
+export const getBodyMeasurementOfUserService = async (userId) => {
     try {
-        const currBodyMeasurement = await BodyMeasurement.findOne({
+        const currBodyMeasurement = await BodyMeasurement.find({
             userId: userId
-        }).sort({ Date: -1 });
-        return { success: true, currBodyMeasurement };
+        }).sort({ date: -1 }).limit(4);
+
+        // If no record exists, return empty object
+        if (!currBodyMeasurement || currBodyMeasurement.length === 0) {
+            return {
+                success: true, data: null, message: "BodyMeasurement not found",
+            };
+        }
+        return { success: true, data: currBodyMeasurement, message: "Measurements fetched successfully", };
 
     } catch (error) {
-        return { success: false }
+        console.error("Error in getCurrentBodyMeasurement:", error);
+        return {
+            success: false,
+            data: null,
+            message: error.message || "Failed to fetch Measurements",
+        };
+    }
+}
+
+export const getAllBodyMeasurementOfUserService = async (userId) => {
+    try {
+        const currBodyMeasurement = await BodyMeasurement.find({
+            userId: userId
+        }).sort({ date: -1 });
+
+        // If no record exists, return empty object
+        if (!currBodyMeasurement || currBodyMeasurement.length === 0) {
+            return {
+                success: true, data: null, message: "BodyMeasurement not found",
+            };
+        }
+        return { success: true, data: currBodyMeasurement, message: "Measurements fetched successfully", };
+
+    } catch (error) {
+        console.error("Error in getCurrentBodyMeasurement:", error);
+        return {
+            success: false,
+            data: null,
+            message: error.message || "Failed to fetch Measurements",
+        };
     }
 }
 

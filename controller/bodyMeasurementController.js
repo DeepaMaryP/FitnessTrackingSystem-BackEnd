@@ -1,4 +1,4 @@
-import { createBodyMeasurementService, getBodyMeasuremenHistoryService, getCurrentBodyMeasurementService, updateBodyMeasurementService } from "../services/bodyMeasurementService";
+import { createBodyMeasurementService, getAllBodyMeasurementOfUserService, getBodyMeasurementOfUserService, updateBodyMeasurementService } from "../services/bodyMeasurementService.js";
 
 
 export const createBodyMeasurement = async (req, res) => {
@@ -16,26 +16,26 @@ export const createBodyMeasurement = async (req, res) => {
 }
 
 
-export const getCurrentBodyMeasurement = async (req, res) => {
-    const response = await getCurrentBodyMeasurementService(req.params.userId);
-    if (response.success)
+export const getBodyMeasurementOfUser = async (req, res) => {
+    const response = await getBodyMeasurementOfUserService(req.params.userId);
+   if (response.success)
         return res.status(200).send(response);
     else {
-        return res.status(500).json({ success: false, message: "Failed to get BodyMeasurement" });
+        return res.status(500).json(response);
     }
 }
 
-export const getBodyMeasurementHistory = async (req, res) => {
-    const response = await getBodyMeasuremenHistoryService(req.params.userId);
-    if (response)
+export const getAllBodyMeasurements = async (req, res) => {
+     const response = await getAllBodyMeasurementOfUserService(req.params.userId);
+   if (response.success)
         return res.status(200).send(response);
     else {
-        return res.status(500).json({ success: false, message: "Failed to get BodyMeasurement" });
+        return res.status(500).json(response);
     }
 }
 
 export const updateBodyMeasurement = async (req, res) => {
-    const response = await updateBodyMeasurementService(req.params.userId, req.body)
+    const response = await updateBodyMeasurementService(req.params.Id, req.body)
     if (response.success) {
         return res.status(200).send(response)
     } else {

@@ -14,6 +14,7 @@ import workOutPlanRouter from './routes/workOutPlanMasterRouter.js'
 import dietPlanRouter from './routes/dietPlanMasterRouter.js'
 import targetGoalRouter from './routes/targetRoleRouter.js'
 import foodTrackerRouter from './routes/userFoodTracketRouter.js'
+import bodyMeasurementRouter from './routes/bodyMeasurementRouter.js'
 
 configDotenv()
 connectToDatabase() 
@@ -38,6 +39,7 @@ app.use('/api/workoutplan', workOutPlanRouter)
 app.use('/api/profile', userProfileRouter)
 app.use('/api/targetgoal', targetGoalRouter)
 app.use('/api/foodtracker', foodTrackerRouter)
+app.use('/api/bodymeasurement', bodyMeasurementRouter)
 
 app.listen(3000, ()=>{
     console.log('Server is running..');    

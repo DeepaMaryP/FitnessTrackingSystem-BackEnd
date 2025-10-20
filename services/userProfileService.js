@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 import UserProfile from "../models/userProfile.js";
-import bodyMeasurements from "../models/BodyMeasurements.js";
+import bodyMeasurements from "../models/bodyMeasurement.js";
 
 export const createUserProfileService = async (data) => {
     try {
