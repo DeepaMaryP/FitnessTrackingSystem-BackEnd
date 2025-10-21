@@ -1,7 +1,7 @@
 import { Router } from "express";
 import { handleAuth } from "../middleware/auth.js";
-import { validateWorkOutPlan } from "../middleware/workoutPlanMasterMiddleware.js";
-import { createWorkOutPlan, deleteWorkOutPlan, getWorkOutPlan, getWorkOutPlanById, updateWorkOutPlan } from "../controller/workOutPlanMasterController.js";
+import { validateWorkOutPlan } from "../middleware/workoutPlanMiddleware.js";
+import { createWorkOutPlan, deleteWorkOutPlan, getWorkOutPlan, getWorkOutPlanById, updateWorkOutPlan } from "../controller/workOutPlanController.js";
 
 
 const router = Router()

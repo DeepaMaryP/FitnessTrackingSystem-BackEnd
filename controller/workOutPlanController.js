@@ -1,8 +1,8 @@
-import { createWorkOutPlanMasterService, deleteWorkOutPlanMasterService, getAllWorkOutPlanMasterService, getWorkOutPlanMasterWithId, updateWorkOutPlanMasterService } from "../services/workoutPlanMasterService.js";
+import { createWorkOutPlanService, deleteWorkOutPlanService, getAllWorkOutPlanService, getWorkOutPlanWithId, updateWorkOutPlanService } from "../services/workoutPlanService.js";
 
 export const createWorkOutPlan = async (req, res) => {
     let data = req.body    
-    const result = await createWorkOutPlanMasterService(data)
+    const result = await createWorkOutPlanService(data)
     if (result.success) {
         return res.status(201).json({ success: true, message: "WorkOutPlan created successfully" })
     } else {
@@ -14,18 +14,17 @@ export const createWorkOutPlan = async (req, res) => {
     }
 }
 
-
 export const getWorkOutPlan = async (req, res) => {
-    const response = await getAllWorkOutPlanMasterService();
+    const response = await getAllWorkOutPlanService();
     if (response.success)
         return res.status(200).send(response);
     else {
-        return res.status(500).json({ success: false, message: "Failed to get WorkOutPlan" });
+        return res.status(500).send(response);
     }
 }
 
 export const getWorkOutPlanById = async (req, res) => {
-    const response = await getWorkOutPlanMasterWithId(req.params.Id);
+    const response = await getWorkOutPlanWithId(req.params.Id);
     if (response)
         return res.status(200).send(response);
     else {
@@ -34,7 +33,7 @@ export const getWorkOutPlanById = async (req, res) => {
 }
 
 export const updateWorkOutPlan = async (req, res) => {
-    const response = await updateWorkOutPlanMasterService(req.params.Id, req.body)
+    const response = await updateWorkOutPlanService(req.params.Id, req.body)
     if (response.success) {
         return res.status(200).send(response)
     } else {
@@ -43,7 +42,7 @@ export const updateWorkOutPlan = async (req, res) => {
 }
 
 export const deleteWorkOutPlan = async (req, res) => {
-    const response = await deleteWorkOutPlanMasterService(req.params.Id)
+    const response = await deleteWorkOutPlanService(req.params.Id)
     if (response) {
         return res.status(200).json({ success: true, message: "WorkOutPlan deleted successfully" })
     } else {
