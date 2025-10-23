@@ -42,12 +42,72 @@ export const createUserTrainerService = async (userTrainer) => {
 export const getUserTrainersService = async (userId) => {
     try {
         const allUserTrainers = await UserTrainer.find({ userId: userId })
-                                .populate('userId', 'name').populate('trainer_id', 'name');
+            .populate('userId', 'name').populate('trainer_id', 'name');
         return { success: true, allUserTrainers };
 
     } catch (error) {
         console.log(error);
         return { success: false }
+    }
+}
+
+export const getUserAssignedToTrainerService = async (trainerId) => {
+    try {
+
+        const assignedUsers = await UserTrainer.aggregate([           
+            { $match: { trainer_id: mongoose.Types.ObjectId.createFromHexString(trainerId) } },
+            // Lookup user details
+            {
+                $lookup: {
+                    from: "users",
+                    localField: "userId",
+                    foreignField: "_id",
+                    as: "user",
+                },
+            },
+            { $unwind: "$user" },
+
+            // Lookup target goal
+            {
+                $lookup: {
+                    from: "targetgoals",localField: "userId",foreignField: "userId", as: "goal",
+                },
+            }, { $unwind: { path: "$goal", preserveNullAndEmptyArrays: true } },
+
+            // Lookup body measurements
+            {
+                $lookup: {
+                    from: "bodymeasurements",localField: "userId",foreignField: "userId", as: "measurements",
+                },
+            },
+
+            // Sort measurements by date and get first & last
+            {
+                $addFields: {
+                    measurements: { $sortArray: { input: "$measurements", sortBy: { date: 1 } } },
+                    starting_weight: { $arrayElemAt: ["$measurements.weight_kg", 0] },
+                    latest_weight: { $arrayElemAt: ["$measurements.weight_kg", -1] },
+                },
+            },
+
+            // Project final fields
+            {
+                $project: {
+                    _id: 0,
+                    userId: "$user._id",
+                    name: "$user.name",                    
+                    goal_type: "$goal.goal_type",
+                    target_weight: "$goal.target_weight",
+                    starting_weight: 1,
+                    latest_weight: 1,
+                },
+            },
+        ]);
+        return { success: true, data : assignedUsers };
+
+    } catch (error) {
+        console.log(error);
+        return { success: false, data : null }
     }
 }
 
@@ -151,7 +211,7 @@ export const getUserTrainerStatisticsService = async () => {
 
 export const deleteUserTrainerService = async (userid) => {
     try {
-       await UserTrainer.deleteMany({ userId: userid });
+        await UserTrainer.deleteMany({ userId: userid });
         return true;
     } catch (error) {
         console.log(error);

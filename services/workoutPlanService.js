@@ -4,9 +4,9 @@ export const createWorkOutPlanService = async (data) => {
     try {
         let newWorkOutPlan = new WorkOutPlan(data);
         newWorkOutPlan = await newWorkOutPlan.save();
-        return {success : true, WorkOutPlan:newWorkOutPlan}
+        return { success: true, WorkOutPlan: newWorkOutPlan }
     } catch (error) {
-        console.log({error});
+        console.log({ error });
         return {
             success: false,
             message: error.message || "Failed to create WorkOutPlan",
@@ -18,7 +18,7 @@ export const createWorkOutPlanService = async (data) => {
 export const getAllWorkOutPlanService = async () => {
     try {
         const allWorkOutPlans = await WorkOutPlan.find();
-       if (allWorkOutPlans) {
+        if (allWorkOutPlans) {
             return {
                 success: true, data: allWorkOutPlans, message: "WorkOutPlans fetched successfully",
             };
@@ -38,14 +38,22 @@ export const getAllWorkOutPlanService = async () => {
 
 export const getWorkOutPlanWithId = async (id) => {
     try {
-        const WorkOutPlan = await WorkOutPlan.findById(id)
-        if (WorkOutPlan) {
-            return WorkOutPlan
+        const workOutPlan = await WorkOutPlan.findById(id)
+        if (workOutPlan) {
+            return {
+                success: true, data: workOutPlan, message: "WorkOutPlan fetched successfully",
+            };
         }
-        return false
+        return {
+            success: true, data: null, message: "WorkOutPlan not found",
+        };
 
     } catch (error) {
-        return false
+        return {
+            success: false,
+            data: null,
+            message: error.message || "Failed to WorkOutPlan",
+        };
     }
 }
 
@@ -65,12 +73,12 @@ export const updateWorkOutPlanService = async (id, data) => {
     }
 }
 
-export const deleteWorkOutPlanService = async(id) =>{
+export const deleteWorkOutPlanService = async (id) => {
     try {
-       await WorkOutPlan.findByIdAndDelete(id)
-       return true;
+        await WorkOutPlan.findByIdAndDelete(id)
+        return true;
     } catch (error) {
         console.log(error);
-        return false;        
+        return false;
     }
 }

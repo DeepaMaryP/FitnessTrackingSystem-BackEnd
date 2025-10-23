@@ -14,12 +14,12 @@ export const validateWorkOutPlan = async (req, res, next) => {
         return res.status(400).json({ success: false, message: "exercises should be an array" });
     }
 
-    exercises?.map(e => {
-        if (!e.exercise_Id)
-            return res.status(400).json({ success: false, message: "please enter exercise Id" });
-        if (!e.met)
-            return res.status(400).json({ success: false, message: "please enter met" });
-    })
+    const hasInvalidExercise = exercises.some(
+        (ex) => !ex.exercise_id.trim() || !ex.met
+    );
+    if (hasInvalidExercise) {
+        return res.status(400).json({ success: false, message: "Please enter exercise Id and MET" });
+    }
 
     next()
 }

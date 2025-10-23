@@ -1,12 +1,13 @@
 import { createWorkOutPlanService, deleteWorkOutPlanService, getAllWorkOutPlanService, getWorkOutPlanWithId, updateWorkOutPlanService } from "../services/workoutPlanService.js";
 
 export const createWorkOutPlan = async (req, res) => {
-    let data = req.body    
+    let data = req.body
     const result = await createWorkOutPlanService(data)
+
     if (result.success) {
         return res.status(201).json({ success: true, message: "WorkOutPlan created successfully" })
     } else {
-       return res.status(500).json({
+        return res.status(500).json({
             success: false,
             message: result.message,
             errors: result.errors,
@@ -25,10 +26,10 @@ export const getWorkOutPlan = async (req, res) => {
 
 export const getWorkOutPlanById = async (req, res) => {
     const response = await getWorkOutPlanWithId(req.params.Id);
-    if (response)
+    if (response.success)
         return res.status(200).send(response);
     else {
-        return res.status(500).json({ success: false, message: "Failed to get WorkOutPlan" });
+        return res.status(500).send(response);
     }
 }
 
