@@ -1,16 +1,12 @@
-import { createUserDietPlanService, deleteUserDietPlanService, getExpiredUserDietPlanService, getUserCurrentDietPlansService } from "../services/userDietPlanService";
+import { createUserDietPlanService, deleteUserDietPlanService, getExpiredUserDietPlanService, getUserCurrentDietPlansService } from "../services/userDietPlanService.js";
 
 export const createUserDietPlan = async (req, res) => {
     let data = req.body
     const result = await createUserDietPlanService(data)
     if (result.success) {
-        return res.status(201).json({ success: true, message: "UserDietPlan created successfully" })
+        return res.status(201).send(result)
     } else {
-       return res.status(500).json({
-            success: false,
-            message: result.message,
-            errors: result.errors,
-        });
+       return res.status(500).send(result)
     }
 }
 
@@ -29,7 +25,7 @@ export const getCurrentUserDietPlans = async (req, res) => {
     if (response)
         return res.status(200).send(response);
     else {
-        return res.status(500).json({ success: false, message: "Failed to get User DietPlans" });
+        return res.status(500).send(response);
     }
 }
 

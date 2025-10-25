@@ -1,4 +1,4 @@
-import { createTargetGoalService, getTargetGoalService, updateTargetGoalService } from "../services/targetGoalService.js";
+import { createTargetGoalService, getTargetGoalAndStatService, getTargetGoalService, updateTargetGoalService } from "../services/targetGoalService.js";
 
 export const createTargetGoal = async (req, res) => {
     let data = req.body
@@ -21,7 +21,16 @@ export const createTargetGoal = async (req, res) => {
 
 export const getTargetGoal = async (req, res) => {
     const response = await getTargetGoalService(req.params.userId);
-   if (response.success)
+    if (response.success)
+        return res.status(200).send(response);
+    else {
+        return res.status(500).json(response);
+    }
+}
+
+export const getTargetGoalAndStat = async (req, res) => {
+    const response = await getTargetGoalAndStatService(req.params.userId);
+    if (response.success)
         return res.status(200).send(response);
     else {
         return res.status(500).json(response);

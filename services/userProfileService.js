@@ -46,7 +46,7 @@ export const createUserProfileWithMeasurementService = async (userProfile, bodyM
 export const getUserProfileWithId = async (userId) => {
     try {
         // Fetch profile
-        const userProfiles = await UserProfile.find({ userId: userId });
+        const userProfiles = await UserProfile.find({ userId: userId }).populate('userId','name email');
 
         // Fetch latest weight
         const latestMeasurement = await bodyMeasurements

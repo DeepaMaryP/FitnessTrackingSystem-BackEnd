@@ -1,6 +1,6 @@
-const mongoose = require("mongoose");
+import mongoose, { model, Schema } from "mongoose";
 
-const userDietPlanSchema = new mongoose.Schema({
+const userDietPlanSchema = new Schema({
   userId: { type: mongoose.Schema.Types.ObjectId, ref: "User", required: true },
   diet_plan_id: { type: mongoose.Schema.Types.ObjectId, ref: "DietPlanMaster", required: true },
   start_date: { type: Date, default: Date.now },

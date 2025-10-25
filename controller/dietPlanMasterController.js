@@ -20,7 +20,7 @@ export const getDietPlan = async (req, res) => {
     if (response.success)
         return res.status(200).send(response);
     else {
-        return res.status(500).json({ success: false, message: "Failed to get DietPlan" });
+        return res.status(500).send(response);
     }
 }
 

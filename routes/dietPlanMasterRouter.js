@@ -8,6 +8,7 @@ const router = Router()
 //trainer
 router.route("/").post(validateDietPlan, handleAuth, createDietPlan);
 router.route("/").get(handleAuth, getDietPlan)
+router.route("/user/:Id").get(handleAuth, getDietPlanById)
 router.route("/:Id").get(handleAuth, getDietPlanById)
 router.route("/:Id").patch(handleAuth,validateDietPlan, updateDietPlan)
 router.route("/:Id").delete(handleAuth, deleteDietPlan)

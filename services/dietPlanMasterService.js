@@ -18,11 +18,13 @@ export const createDietPlanService = async (data) => {
 
 export const getAllDietPlanService = async () => {
     try {
-        const allDietPlans = await DietPlan.find();
-        return { success: true, allDietPlans };
-
+        const allDietPlans = await DietPlan.find();       
+        if (allDietPlans && allDietPlans.length > 0) {
+            return { success: true, data: allDietPlans, message: "DietPlan fetched successfully" };
+        }
+        return { success: true, data: null, message: "DietPlan not found" };
     } catch (error) {
-        return { success: false }
+        return { success: false, data: null, message: "Failed to get DietPlan" }
     }
 }
 

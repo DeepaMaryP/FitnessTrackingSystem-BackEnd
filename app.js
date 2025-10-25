@@ -17,6 +17,8 @@ import targetGoalRouter from './routes/targetRoleRouter.js'
 import foodTrackerRouter from './routes/userFoodTracketRouter.js'
 import bodyMeasurementRouter from './routes/bodyMeasurementRouter.js'
 import workOutTrackerRouter from './routes/userWorkOutTrackerRouter.js'
+import userDietPlanRouter from './routes/userDietPlanRouter.js'
+import userWorkOutPlanRouter from './routes/userWorkOutPlanRouter.js'
 
 configDotenv()
 connectToDatabase() 
@@ -38,6 +40,8 @@ app.use('/api/foodMaster', foodMasterRouter)
 app.use('/api/dietPlan', dietPlanRouter)
 app.use('/api/exerciseMaster', exerciseMasterRouter)
 app.use('/api/workoutplan', workOutPlanRouter)
+app.use('/api/userdietplan', userDietPlanRouter)
+app.use('/api/userworkoutplan', userWorkOutPlanRouter)
 
 //For User
 app.use('/api/profile', userProfileRouter)

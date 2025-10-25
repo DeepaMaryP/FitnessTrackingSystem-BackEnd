@@ -55,6 +55,62 @@ export const getTargetGoalService = async (userId) => {
     }
 }
 
+export const getTargetGoalAndStatService = async (userId) => {
+    try {
+        const allTargetGoal = await TargetGoal.aggregate([
+            { $match: { userId: mongoose.Types.ObjectId.createFromHexString(userId) } },
+            {
+                $lookup: {
+                    from: "bodymeasurements",
+                    localField: "userId",
+                    foreignField: "userId",
+                    as: "bodyMeasurements"
+                },
+            },
+             {
+                 $project: {
+                     goal_type: 1,
+                     target_weight: 1,
+                     duration_days: 1,
+                     "bodyMeasurements.date": 1,
+                     "bodyMeasurements.weight_kg": 1,
+                 }
+            
+             },
+             {
+                 $addFields : {
+                     sortedWeights : {
+                         $sortArray : {input : "$bodyMeasurements", sortBy : {date : 1}},
+                     },
+                     start_weight : {$arrayElemAt : ["$bodyMeasurements.weight_kg", 0]},
+                     current_weight : {$arrayElemAt : ["$bodyMeasurements.weight_kg",
+                         { $subtract: [{ $size: "$bodyMeasurements" }, 1] }
+                     ]}
+                 }
+             }
+        ])
+
+        if (allTargetGoal && allTargetGoal.length > 0 ) {
+            return {
+                success: true, data: allTargetGoal[0], message: "Goal fetched successfully",
+            };
+        }        
+
+        return {
+            success: true,
+            data: null,
+            message: "TargetGoal not found",
+        };
+
+    } catch (error) {
+        return {
+            success: false,
+            data: null,
+            message: error.message || "Failed to fetch Goal",
+        };
+    }
+}
+
 export const updateTargetGoalService = async (id, data) => {
     try {
         const updatedTargetGoal = await TargetGoal.findByIdAndUpdate(id, data);
