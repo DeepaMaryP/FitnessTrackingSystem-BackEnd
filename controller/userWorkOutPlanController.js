@@ -30,7 +30,7 @@ export const getCurrentUserWorkOutPlans = async (req, res) => {
     }
 }
 
-export const deleteUserWorkOutPlan = async (req, res) => {
+export const deleteUserWorkOutPlan = async (req, res) => {    
     const response = await deleteUserWorkOutPlanService(req.params.Id)
     if (response) {
         return res.status(200).json({ success: true, message: "User WorkOutPlan deleted successfully" })

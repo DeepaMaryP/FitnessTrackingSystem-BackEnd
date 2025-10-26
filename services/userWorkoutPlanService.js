@@ -58,7 +58,7 @@ export const getUserCurrentWorkOutPlansService = async (userId) => {
 }
 
 export const deleteUserWorkOutPlanService = async (id) => {
-    try {
+    try {        
         await UserWorkOutPlan.findByIdAndDelete(id)
         return true;
     } catch (error) {
