@@ -1,4 +1,4 @@
-import { createUserWorkOutTrackerService, getTodaysWorkOutTrackerWithUserIdService, getUserWorkOutTrackerByDatesService } from "../services/UserWorkOutTrackerService.js";
+import { createUserWorkOutTrackerService, getTodaysWorkOutTrackerWithUserIdService, getUserWorkOutTrackerByDatesService, getUserWorkOutTrackerService } from "../services/UserWorkOutTrackerService.js";
 
 export const createUserWorkOutTracker = async (req, res) => {
     let data = req.body
@@ -26,6 +26,16 @@ export const getUserWorkOutTrackerByDates = async (req, res) => {
 
 export const getTodaysUserWorkOutTrackerByUserId = async (req, res) => {
     const response = await getTodaysWorkOutTrackerWithUserIdService(req.params.userId);
+    if (response.success)
+        return res.status(200).send(response);
+    else {
+        return res.status(500).json(response);
+    }
+}
+
+export const getUserWorkOutTracker = async (req, res) => {
+    const { userId, date } = req.query;
+    const response = await getUserWorkOutTrackerService(userId, date);
     if (response.success)
         return res.status(200).send(response);
     else {

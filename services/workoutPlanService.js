@@ -37,7 +37,7 @@ export const getAllWorkOutPlanService = async () => {
 }
 
 export const getWorkOutPlanWithId = async (id) => {
-    try {
+    try {      
         const workOutPlan = await WorkOutPlan.findById(id)
         if (workOutPlan) {
             return {

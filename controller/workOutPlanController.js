@@ -25,7 +25,7 @@ export const getWorkOutPlan = async (req, res) => {
 }
 
 export const getWorkOutPlanById = async (req, res) => {
-    const response = await getWorkOutPlanWithId(req.params.Id);
+    const response = await getWorkOutPlanWithId(req.params.Id); 
     if (response.success)
         return res.status(200).send(response);
     else {
