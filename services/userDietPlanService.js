@@ -43,7 +43,7 @@ export const getUserCurrentDietPlansService = async (userId) => {
 
         const userDietPlan = await UserDietPlan.find({
             userId: userId, status: 'Active', end_date: { $gte: today }
-        }).populate('diet_plan_id', 'plan_name');
+        }).populate('diet_plan_id', 'plan_name total_calories');
 
         if (userDietPlan && userDietPlan.length > 0) {
             return {

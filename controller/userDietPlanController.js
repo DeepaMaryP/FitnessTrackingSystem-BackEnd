@@ -21,7 +21,7 @@ export const getExpiredUserDietPlans = async (req, res) => {
 }
 
 export const getCurrentUserDietPlans = async (req, res) => {
-    const response = await getUserCurrentDietPlansService(req.params.userId);
+    const response = await getUserCurrentDietPlansService(req.params.userId);   
     if (response)
         return res.status(200).send(response);
     else {

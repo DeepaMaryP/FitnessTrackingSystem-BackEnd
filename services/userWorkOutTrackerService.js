@@ -68,8 +68,9 @@ export const getTodaysWorkOutTrackerWithUserIdService = async (userId) => {
 export const getUserWorkOutTrackerByDatesService = async (userId, fromdate, todate) => {
     try {
         const from = new Date(fromdate);
+        from.setHours(0, 0, 0, 0); // from the begining of the day
         const to = new Date(todate);
-        to.setHours(23, 59, 59, 999);
+        to.setHours(0, 0, 0, 0);     // not include this day  
 
         const userWorkOutTracker = await UserWorkoutTracker.find({ user_id: userId, date: { $gte: from, $lt: to } })
 

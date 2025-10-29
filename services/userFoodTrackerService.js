@@ -76,13 +76,14 @@ export const getTodaysFoodTrackerWithUserIdService = async (userId) => {
 export const getUserFoodTrackerByDatesService = async (userId, fromdate, todate) => {
     try {
         const from = new Date(fromdate);
+        from.setHours(0, 0, 0, 0); //from the begining of the day
         const to = new Date(todate);
-        to.setHours(23, 59, 59, 999);
-        
+        to.setHours(0, 0, 0, 0); //exclude this day
+
         const userFoodTracker = await UserFoodTracker.find({ userId: userId, date: { $gte: from, $lt: to } })
             .populate('meals.food_items.food_id', 'name');
 
-        if (userFoodTracker) {           
+        if (userFoodTracker) {
             return {
                 success: true, data: userFoodTracker, message: "Food Tracker fetched successfully",
             };

@@ -18,7 +18,7 @@ export const createDietPlanService = async (data) => {
 
 export const getAllDietPlanService = async () => {
     try {
-        const allDietPlans = await DietPlan.find();       
+        const allDietPlans = await DietPlan.find();
         if (allDietPlans && allDietPlans.length > 0) {
             return { success: true, data: allDietPlans, message: "DietPlan fetched successfully" };
         }
@@ -33,18 +33,22 @@ export const getDietPlanWithId = async (id) => {
         const plan = await DietPlan.findById(id)
             .populate({
                 path: "meals.Breakfast.food_items.food_id",
+                select: "name calories protein_g carbs_g fat_g",
                 model: "FoodMaster"
             })
             .populate({
                 path: "meals.Lunch.food_items.food_id",
+                select: "name calories protein_g carbs_g fat_g",
                 model: "FoodMaster"
             })
             .populate({
                 path: "meals.Dinner.food_items.food_id",
+                select: "name calories protein_g carbs_g fat_g",
                 model: "FoodMaster"
             })
             .populate({
                 path: "meals.Snack.food_items.food_id",
+                select: "name calories protein_g carbs_g fat_g",
                 model: "FoodMaster"
             }).lean();
 
@@ -58,13 +62,22 @@ export const getDietPlanWithId = async (id) => {
                 }));
             }
         }
+
         if (plan) {
-            return plan
+            return {
+                success: true, data: plan, message: "DietPlan fetched successfully",
+            };
         }
-        return false
+        return {
+            success: true, data: null, message: "DietPlan not found",
+        };
 
     } catch (error) {
-        return false
+        return {
+            success: false,
+            data: null,
+            message: error.message || "Failed to DietPlan",
+        };
     }
 }
 

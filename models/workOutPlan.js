@@ -9,7 +9,7 @@ const workoutPlanSchema = new Schema({
   
   exercises: [
     {
-      exercise_id: { type: mongoose.Schema.Types.ObjectId, ref: "WorkoutMaster", required: true },
+      exercise_id: { type: mongoose.Schema.Types.ObjectId, ref: "exerciseMaster", required: true },
       sets: { type: Number },
       reps: { type: Number },
       duration_min: { type: Number },
