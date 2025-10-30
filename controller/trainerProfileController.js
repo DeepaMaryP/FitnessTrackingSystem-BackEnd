@@ -42,7 +42,7 @@ export const getTrainerProfileByUserId = async (req, res) => {
     if (response)
         return res.status(200).send(response);
     else {
-        return res.status(500).json({ success: false, message: "Failed to get TrainerProfile" });
+        return res.status(500).send(response);
     }
 }
 

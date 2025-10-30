@@ -49,8 +49,10 @@ export const getAllTrainersProfileService = async () => {
 
 export const getApprovedTrainersProfileService = async () => {
     try {
-        const allTrainersProfile = await TrainerProfile.find({approvedStatus:
-            'approved'} ).populate('userId', 'name'); ;
+        const allTrainersProfile = await TrainerProfile.find({
+            approvedStatus:
+                'approved'
+        }).populate('userId', 'name');;
         return { success: true, allTrainersProfile };
 
     } catch (error) {
@@ -59,44 +61,44 @@ export const getApprovedTrainersProfileService = async () => {
 }
 
 export const getTrainerProfileWithUserId = async (id) => {
-    try {      
-        const trainerProfile = await TrainerProfile.findOne({ userId: id });              
+    try {
+        const trainerProfile = await TrainerProfile.findOne({ userId: id });
         if (trainerProfile) {
-            return trainerProfile
+            return { success: true, data: trainerProfile, message: "Fetched TrainerProfile successfully" }
         }
-        return false
+        return { success: true, data: null, message: "TrainerProfile Not Found" }
 
     } catch (error) {
-        return false
+        return { success: false, data: null, message: "Failed to fetch TrainerProfile" }
     }
 }
 
 export const getApprovedTrainerCountService = async () => {
-    try {               
+    try {
         const approvedTrainerCount = await TrainerProfile.countDocuments({
             approvedStatus: "approved"
-        });       
-            
-        return { success: true, count: approvedTrainerCount}
-                       
+        });
+
+        return { success: true, count: approvedTrainerCount }
+
     } catch (error) {
         console.log(error);
-        
+
         return false
     }
 }
 
 export const getPendingTrainerCountService = async () => {
-    try {               
+    try {
         const approvedTrainerCount = await TrainerProfile.countDocuments({
             approvedStatus: "pending"
-        });       
-            
-        return { success: true, count: approvedTrainerCount}
-                       
+        });
+
+        return { success: true, count: approvedTrainerCount }
+
     } catch (error) {
         console.log(error);
-        
+
         return false
     }
 }
@@ -128,7 +130,7 @@ export const deleteTrainerProfileService = async (id) => {
 }
 
 export const approveTrainerService = async (id, data) => {
-    try {    
+    try {
         await TrainerProfile.findByIdAndUpdate(id, { $set: { approvedStatus: "approved", approvedBy: data, approvedAt: new Date() } })
         return true;
     } catch (error) {

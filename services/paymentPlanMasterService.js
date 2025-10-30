@@ -18,7 +18,7 @@ export const createPaymentPlanService = async (data) => {
 
 export const getAllPaymentPlanService = async () => {
     try {
-        const allPaymentPlan = await PaymentPlan.find();
+        const allPaymentPlan = await PaymentPlan.find();     
         return { success: true, allPaymentPlan };
 
     } catch (error) {

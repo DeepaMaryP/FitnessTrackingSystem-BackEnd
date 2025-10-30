@@ -7,7 +7,7 @@ const router = Router()
 
 //admin
 router.route("/").post(validatePaymentPlan, handleAuth, createPaymentPlan);
-router.route("/").get(handleAuth, getPaymentPlans)
+router.route("/").get( getPaymentPlans)
 router.route("/dash/:date").get(handleAuth, getTotalEarnings)
 router.route("/:Id").get(handleAuth, getPaymentPlanById)
 router.route("/:Id").patch(handleAuth, updatePaymentPlan)
