@@ -9,7 +9,7 @@ const router = Router()
 router.route("/").post(validatePaymentPlan, handleAuth, createPaymentPlan);
 router.route("/").get( getPaymentPlans)
 router.route("/dash/:date").get(handleAuth, getTotalEarnings)
-router.route("/:Id").get(handleAuth, getPaymentPlanById)
+router.route("/:Id").get( getPaymentPlanById)
 router.route("/:Id").patch(handleAuth, updatePaymentPlan)
 router.route("/verify/:Id").patch(handleAuth, approvePaymentPlan)
 router.route("/:Id").delete(handleAuth, deletePaymentPlan)

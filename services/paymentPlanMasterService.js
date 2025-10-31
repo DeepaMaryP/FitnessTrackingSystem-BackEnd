@@ -18,7 +18,7 @@ export const createPaymentPlanService = async (data) => {
 
 export const getAllPaymentPlanService = async () => {
     try {
-        const allPaymentPlan = await PaymentPlan.find();     
+        const allPaymentPlan = await PaymentPlan.find();
         return { success: true, allPaymentPlan };
 
     } catch (error) {
@@ -30,12 +30,12 @@ export const getPaymentPlanWithId = async (id) => {
     try {
         const paymentPlan = await PaymentPlan.findById(id)
         if (paymentPlan) {
-            return paymentPlan
+            return { success: true, data: paymentPlan, message: "paymentPlan fetched successfully", };
         }
-        return false
+        return { success: true, data: null, message: "paymentPlan not found", };
 
     } catch (error) {
-        return false
+        return { success: false, data: null, message: "Error in fetching paymentPlan", };
     }
 }
 
