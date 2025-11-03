@@ -1,4 +1,4 @@
-import { createUserPaymentService, getLatestUserPaymentService, getPaidUserCountWithNoTrainersService } from "../services/userPaymentService.js";
+import { checkSubscriptionStatusService, createUserPaymentService, getLatestUserPaymentService, getPaidUserCountWithNoTrainersService } from "../services/userPaymentService.js";
 
 export const createUserPaymentController = async (req, res) => {
     let data = req.body
@@ -11,6 +11,15 @@ export const createUserPaymentController = async (req, res) => {
             message: result.message,
             errors: result.errors,
         });
+    }
+}
+
+export const checkSubscriptionStatus = async (req, res) => {
+    const response = await checkSubscriptionStatusService(req.params.userId); 
+    if (response.success)
+        return res.status(200).send(response);
+    else {
+        return res.status(500).json({ success: false, message: "Failed to get Subscription details" });
     }
 }
 

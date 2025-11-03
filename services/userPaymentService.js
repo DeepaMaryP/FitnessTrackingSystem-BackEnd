@@ -27,6 +27,22 @@ export const getLatestUserPaymentService = async (userId) => {
     }
 }
 
+export const checkSubscriptionStatusService = async (userId) => {
+    try {
+        const today = new Date();
+
+        const activeSub = await UserPayment.findOne({
+            userId,
+            status: "Completed",
+            expiry_date: { $gte: today },
+        });
+
+        return { success : true, isSubscribed: !!activeSub };
+    } catch (error) {    
+        return { success: false }
+    }
+}
+
 export const getPaidUserCountWithNoTrainersService = async () => {
     try {
         const totalUnassignedPaidUsers = await UserPayment.aggregate([
