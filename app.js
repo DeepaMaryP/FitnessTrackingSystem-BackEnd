@@ -20,6 +20,7 @@ import workOutTrackerRouter from './routes/userWorkOutTrackerRouter.js'
 import userDietPlanRouter from './routes/userDietPlanRouter.js'
 import userWorkOutPlanRouter from './routes/userWorkOutPlanRouter.js'
 import paymentGatewayRouter from './routes/paymentGatewayRouter.js'
+import reportRouter from './routes/reportRouter.js'
 
 configDotenv()
 connectToDatabase() 
@@ -33,7 +34,7 @@ app.use('/api/user', userRouter)
 app.use('/api/trainer', trainerProfileRouter)
 app.use('/api/usertrainer', userTrainerRouter)
 app.use('/api/fitplans', paymentPlanRouter)
-app.use('/api/userpayment', userPaymentRouter)
+app.use('/api/reports', reportRouter)
 
 
 //For trainer
@@ -51,6 +52,7 @@ app.use('/api/foodtracker', foodTrackerRouter)
 app.use('/api/bodymeasurement', bodyMeasurementRouter)
 app.use('/api/workouttracker', workOutTrackerRouter)
 app.use('/api/payment', paymentGatewayRouter)
+app.use('/api/userpayment', userPaymentRouter)
 
 app.listen(3000, ()=>{
     console.log('Server is running..');    
