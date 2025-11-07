@@ -139,6 +139,17 @@ export const approveTrainerService = async (id, data) => {
     }
 }
 
+export const blockTrainerService = async (id) => {
+    try {
+        await TrainerProfile.findByIdAndUpdate(id, { $set: { approvedStatus: "blocked" } })
+        return true;
+    } catch (error) {
+        console.log(error);
+        return false;
+    }
+}
+
+
 export const updateVerificationDocumentService = async (id, data) => {
     try {
         await TrainerProfile.findByIdAndUpdate(id, { $set: { certification: data } })

@@ -1,6 +1,6 @@
 import { Router } from "express";
 import { handleValidateUserSignIn, validateUser, validateUserForAdmin, validateUserTrainerForAdmin } from "../middleware/userMiddleware.js";
-import { createUser, createUserTrainer, deleteUser, getActivePaidUsers, getActiveUnAssignedPaidUsers, getUserById, getUserMetrics, getUsers, getUserStatistics, loginUser, updateUser, updateUserPassword, updateUserTrainer } from "../controller/userController.js";
+import { createUser, createUserTrainer, deleteUser, getActivePaidUsers, getActiveUnAssignedPaidUsers, getUserById, getUsers, loginUser, updateUser, updateUserPassword, updateUserTrainer } from "../controller/userController.js";
 import { handleAuth } from "../middleware/auth.js";
 const router = Router()
 
@@ -18,8 +18,5 @@ router.route("/:userId").patch(handleAuth, validateUserForAdmin, updateUser)
 router.route("/trainer/:userId").patch(handleAuth, validateUserTrainerForAdmin, updateUserTrainer)
 router.route("/changepwd/:userId").patch(handleAuth, updateUserPassword)
 router.route("/:userId").delete(handleAuth, deleteUser)
-router.route("/dash/metrics").get(handleAuth, getUserMetrics)
-router.route("/dash/userstat").get(handleAuth, getUserStatistics)
-
 
 export default router;

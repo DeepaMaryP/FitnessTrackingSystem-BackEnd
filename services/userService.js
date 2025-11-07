@@ -47,7 +47,7 @@ export const createUserTrainerService = async (user, trainer) => {
 export const getUserDetailsWithEmail = async (email) => {
     try {
         const user = await User.findOne({ email })
-        if (user) {          
+        if (user) {
             return user
         }
         return false
@@ -101,54 +101,6 @@ export const getAllActivePaidUsersService = async () => {
         return { success: false }
     }
 }
-
-export const getUsersMetricsForDashboardService = async () => {
-    try {
-        const userCounts = await User.aggregate([
-            { $match: { role: "User" } }, // Exclude Admin & Trainer
-            {
-                $group: {
-                    _id: null,
-                    totalRegdUsers: { $sum: 1 },
-                    activeUsers: { $sum: { $cond: [{ $eq: ["$status", "Active"] }, 1, 0] } },
-                }
-            }
-        ]);
-
-        return { success: true, userCounts };
-
-    } catch (error) {
-        console.log(error);
-        return { success: false }
-    }
-}
-
-export const getUserStatisticsService = async () => {
-    try {
-        const sixMonthAgo = new Date();
-        sixMonthAgo.setMonth((new Date().getMonth() - 6));
-
-        const userCounts = await User.aggregate([
-            { $match: { createdAt: { $gte: sixMonthAgo } } },
-            {
-                $group: {
-                    _id: {
-                        year: { $year: "$createdAt" },
-                        month: { $month: "$createdAt" }
-                    }, count: { $sum: 1 }
-                }
-            },
-            { $sort: { "_id.year": 1, "_id.month": 1 } }
-        ]);
-
-        return { success: true, userCounts };
-
-    } catch (error) {
-        console.log(error);
-        return { success: false }
-    }
-}
-
 
 export const getUserWithId = async (id) => {
     try {

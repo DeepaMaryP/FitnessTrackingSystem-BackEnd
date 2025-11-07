@@ -1,5 +1,5 @@
 import bcrypt from "bcryptjs";
-import { approveTrainerService, createTrainerProfileService, deleteTrainerProfileService, getAllTrainersProfileService, getApprovedTrainerCountService, getApprovedTrainersProfileService, getPendingTrainerCountService, getTrainerProfileWithUserId, updateTrainerProfileService, updateVerificationDocumentService } from "../services/trainerProfileService.js";
+import { approveTrainerService, blockTrainerService, createTrainerProfileService, deleteTrainerProfileService, getAllTrainersProfileService, getApprovedTrainerCountService, getApprovedTrainersProfileService, getPendingTrainerCountService, getTrainerProfileWithUserId, updateTrainerProfileService, updateVerificationDocumentService } from "../services/trainerProfileService.js";
 
 export const createTrainerProfile = async (req, res) => {
     let data = req.body  
@@ -88,6 +88,15 @@ export const approveTrainers = async (req, res) => {
         return res.status(200).json({ success: true, message: "TrainerProfile approved successfully" })
     } else {
         return res.status(500).json({ success: false, message: "Failed to approve TrainerProfile" });
+    }
+}
+
+export const blockTrainer = async (req, res) => {   
+    const response = await blockTrainerService(req.params.id)   
+    if (response) {
+        return res.status(200).json({ success: true, message: "TrainerProfile blocked successfully" })
+    } else {
+        return res.status(500).json({ success: false, message: "Failed to block TrainerProfile" });
     }
 }
 
