@@ -1,4 +1,4 @@
-import { createUserFoodTrackerService, getTodaysFoodTrackerWithUserIdService, getUserFoodTrackerByDatesService } from "../services/UserFoodTrackerService.js";
+import { createUserFoodTrackerService, getTodaysFoodTrackerWithUserIdService, getUserFoodTrackerByDatesService } from "../services/userFoodTrackersService.js"
 
 export const createUserFoodTracker = async (req, res) => {
     let data = req.body
