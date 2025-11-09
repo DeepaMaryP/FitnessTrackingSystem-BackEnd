@@ -41,7 +41,7 @@ app.get("/test-db", async (req, res) => {
     res.json({
       status: "connected",
       database: dbName,
-      collections: collections.map(c => c.name),
+      //collections: collections.map(c => c.name),
     });
   } catch (err) {
     console.error("❌ DB Error:", err);
