@@ -1,4 +1,4 @@
-import { createUserWorkOutTrackerService, getTodaysWorkOutTrackerWithUserIdService, getUserWorkOutTrackerByDatesService, getUserWorkOutTrackerService } from "../services/UserWorkOutTrackerService.js";
+import { createUserWorkOutTrackerService, getTodaysWorkOutTrackerWithUserIdService, getUserWorkOutTrackerByDatesService, getUserWorkOutTrackerService } from "../services/userWorkOutsTrackerService.js";
 
 export const createUserWorkOutTracker = async (req, res) => {
     let data = req.body
