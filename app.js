@@ -21,6 +21,7 @@ import userDietPlanRouter from './routes/userDietPlanRouter.js'
 import userWorkOutPlanRouter from './routes/userWorkOutPlanRouter.js'
 import paymentGatewayRouter from './routes/paymentGatewayRouter.js'
 import reportRouter from './routes/reportRouter.js'
+import mongoose from 'mongoose'
 
 configDotenv()
 connectToDatabase() 
@@ -32,6 +33,21 @@ app.use(cors())
 app.get('/', (req, res) => {
   res.send('Hello World')
 })
+
+app.get("/test-db", async (req, res) => {
+  try {
+    const dbName = mongoose.connection.name;
+    const collections = await mongoose.connection.db.listCollections().toArray();
+    res.json({
+      status: "connected",
+      database: dbName,
+      collections: collections.map(c => c.name),
+    });
+  } catch (err) {
+    res.status(500).json({ status: "error", message: err.message });
+  }
+});
+
 
 //For admin
 app.use('/api/user', userRouter)
