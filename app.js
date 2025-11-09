@@ -22,7 +22,6 @@ import userDietPlanRouter from './routes/userDietPlanRouter.js'
 import userWorkOutPlanRouter from './routes/userWorkOutPlanRouter.js'
 import paymentGatewayRouter from './routes/paymentGatewayRouter.js'
 import reportRouter from './routes/reportRouter.js'
-import mongoose from 'mongoose'
 
 configDotenv()
 
