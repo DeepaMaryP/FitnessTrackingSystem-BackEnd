@@ -23,6 +23,8 @@ import paymentGatewayRouter from './routes/paymentGatewayRouter.js'
 import reportRouter from './routes/reportRouter.js'
 import mongoose from 'mongoose'
 
+configDotenv()
+
 const app = express()
 app.use(express.json())
 app.use(cors())
@@ -31,12 +33,9 @@ app.get('/', (req, res) => {
   res.send('Hello World')
 })
 
-
-configDotenv()
-await connectToDatabase() 
-
 app.get("/test-db", async (req, res) => {
   try {
+    await connectToDatabase(); // ensures DB is connected
     const dbName = mongoose.connection.name;
     const collections = await mongoose.connection.db.listCollections().toArray();
     res.json({
@@ -45,6 +44,7 @@ app.get("/test-db", async (req, res) => {
       collections: collections.map(c => c.name),
     });
   } catch (err) {
+    console.error("❌ DB Error:", err);
     res.status(500).json({ status: "error", message: err.message });
   }
 });
