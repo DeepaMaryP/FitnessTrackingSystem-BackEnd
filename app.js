@@ -37,7 +37,7 @@ app.get("/test-db", async (req, res) => {
   try {
     await connectToDatabase(); // ensures DB is connected
     const dbName = mongoose.connection.name;
-    const collections = await mongoose.connection.db.listCollections().toArray();
+    //const collections = await mongoose.connection.db.listCollections().toArray();
     res.json({
       status: "connected",
       database: dbName,
