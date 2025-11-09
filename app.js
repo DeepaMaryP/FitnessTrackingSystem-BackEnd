@@ -23,9 +23,6 @@ import paymentGatewayRouter from './routes/paymentGatewayRouter.js'
 import reportRouter from './routes/reportRouter.js'
 import mongoose from 'mongoose'
 
-configDotenv()
-connectToDatabase() 
-
 const app = express()
 app.use(express.json())
 app.use(cors())
@@ -33,6 +30,10 @@ app.use(cors())
 app.get('/', (req, res) => {
   res.send('Hello World')
 })
+
+
+configDotenv()
+await connectToDatabase() 
 
 app.get("/test-db", async (req, res) => {
   try {

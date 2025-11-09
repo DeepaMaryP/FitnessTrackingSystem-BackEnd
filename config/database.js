@@ -1,6 +1,6 @@
 import mongoose from "mongoose";
 
-const connectToDatabase = () => {
+const connectToDatabase = async () => {
     try {
         mongoose.connect(`${process.env.CLOUD_MONGI_URL}/${process.env.DB_NAME}`).
             then(
