@@ -38,7 +38,7 @@ export const getAllWorkOutPlanService = async () => {
 
 export const getWorkOutPlanWithId = async (id) => {
     try {      
-        const workOutPlan = await WorkOutPlan.findById(id).populate("exercises.exercise_id","name")
+        const workOutPlan = await WorkOutPlan.findById(id)
         if (workOutPlan) {
             return {
                 success: true, data: workOutPlan, message: "WorkOutPlan fetched successfully",

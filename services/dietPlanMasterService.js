@@ -33,24 +33,25 @@ export const getDietPlanWithId = async (id) => {
         const plan = await DietPlan.findById(id)
             .populate({
                 path: "meals.Breakfast.food_items.food_id",
-                select: "name calories protein_g carbs_g fat_g",
+                select: "name calories protein_g carbs_g fat_g alternate_units",
                 model: "FoodMaster"
             })
             .populate({
                 path: "meals.Lunch.food_items.food_id",
-                select: "name calories protein_g carbs_g fat_g",
+                select: "name calories protein_g carbs_g fat_g alternate_units",
                 model: "FoodMaster"
             })
             .populate({
                 path: "meals.Dinner.food_items.food_id",
-                select: "name calories protein_g carbs_g fat_g",
+                select: "name calories protein_g carbs_g fat_g alternate_units",
                 model: "FoodMaster"
             })
             .populate({
                 path: "meals.Snack.food_items.food_id",
-                select: "name calories protein_g carbs_g fat_g",
+                select: "name calories protein_g carbs_g fat_g alternate_units",
                 model: "FoodMaster"
-            }).lean();
+            }).lean();         
+            
 
         // rename and attach baseFood
         for (const mealName of ["Breakfast", "Lunch", "Dinner", "Snack"]) {
@@ -59,7 +60,7 @@ export const getDietPlanWithId = async (id) => {
                     ...item,
                     baseFood: item.food_id,
                     food_id: item.food_id?._id,
-                }));
+                }));                
             }
         }
 
