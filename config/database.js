@@ -7,9 +7,9 @@ const connectToDatabase = async () => {
 
   try {
     await mongoose.connect(
-      `${process.env.CLOUD_MONGI_URL}/${process.env.DB_NAME}`,
-      { useNewUrlParser: true, useUnifiedTopology: true }
+      `${process.env.CLOUD_MONGI_URL}/${process.env.DB_NAME}`,      
     );
+    
     console.log(" MongoDB connected:", mongoose.connection.name);
     isConnected = true;
   } catch (err) {

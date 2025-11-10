@@ -49,6 +49,15 @@ app.get("/test-db", async (req, res) => {
   }
 });
 
+app.use(async (req, res, next) => {
+  try {
+    await connectToDatabase();
+    next();
+  } catch (err) {
+    console.error("DB connection middleware error:", err);
+    res.status(500).json({ status: "error", message: err.message });
+  }
+});
 
 //For admin
 app.use('/api/user', userRouter)
