@@ -81,7 +81,18 @@ export const getAllActiveUnAssignedPaidUsersService = async () => {
                 }
             },
             {
-                $match: { assignments: { $size: 0 } } // only users with no assignments
+                $lookup: {
+                    from: "userpayments",
+                    localField: "_id",
+                    foreignField: "userId",
+                    as: "payments"
+                }
+            },
+            {
+                $match: {
+                    "payments.status": "Completed",
+                    assignments: { $size: 0 } // no trainer assigned
+                }
             }
         ]);
 
